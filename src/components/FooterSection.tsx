@@ -83,6 +83,7 @@ export const FooterSection: React.FC = () => {
       { name: 'Our Studio', href: '#studio' },
       { name: 'Our Work', href: '#work' },
       { name: 'Packages & Pricing', href: '#pricing' },
+      { name: 'Download cPanel ZIP', href: '/bluecode-cpanel-ready.zip' },
     ],
     Connect: [
       { name: 'Kathmandu, Nepal', href: '#studio', icon: MapPin },

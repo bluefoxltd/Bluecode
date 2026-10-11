@@ -4,9 +4,10 @@ import { Menu, X, ArrowUpRight } from 'lucide-react';
 
 interface NavbarProps {
   onOpenBooking: () => void;
+  onOpenDownload?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenDownload }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -57,10 +58,29 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#0052FF] transition-all duration-300 group-hover:w-full" />
               </a>
             ))}
+            {onOpenDownload && (
+              <button
+                type="button"
+                onClick={onOpenDownload}
+                className="whitespace-nowrap shrink-0 text-[#0052FF] font-semibold hover:text-[#002068] transition-colors relative py-1"
+              >
+                cPanel ZIP
+              </button>
+            )}
           </nav>
 
           {/* Zone 3: 1 Primary Action */}
-          <div className="hidden md:flex items-center gap-4 shrink-0">
+          <div className="hidden md:flex items-center gap-3 shrink-0">
+            {onOpenDownload && (
+              <a
+                href="/bluecode-cpanel-ready.zip"
+                download="bluecode-cpanel-ready.zip"
+                className="hidden lg:inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-full border border-slate-300 text-slate-700 hover:border-[#002068] hover:bg-slate-50 transition"
+                title="Download production zip for cPanel"
+              >
+                <span>cPanel ZIP</span>
+              </a>
+            )}
             <button
               onClick={handleWhatsAppDirect}
               className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-white bg-[#002068] hover:bg-[#0052FF] rounded-full transition-all duration-300 whitespace-nowrap shrink-0 shadow-sm hover:shadow-md"
@@ -97,6 +117,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
             ))}
           </nav>
           <div className="flex flex-col gap-3">
+            <a
+              href="/bluecode-cpanel-ready.zip"
+              download="bluecode-cpanel-ready.zip"
+              onClick={() => setMobileMenuOpen(false)}
+              className="w-full flex items-center justify-center gap-2 py-3 text-sm font-semibold rounded-full bg-blue-50 text-[#002068] border border-blue-200 hover:bg-blue-100 transition"
+            >
+              <span>Download cPanel ZIP</span>
+            </a>
             <button
               onClick={() => {
                 setMobileMenuOpen(false);

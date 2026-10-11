@@ -12,10 +12,12 @@ import { PricingSection } from './components/PricingSection';
 import { CtaSection } from './components/CtaSection';
 import { FooterSection } from './components/FooterSection';
 import { BookingModal } from './components/BookingModal';
+import { DownloadModal } from './components/DownloadModal';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 
 export default function App() {
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
+  const [downloadModalOpen, setDownloadModalOpen] = useState(false);
   const [selectedPlanForBooking, setSelectedPlanForBooking] = useState('Enterprise Custom');
 
   const handleOpenBooking = (planOrService?: string) => {
@@ -30,7 +32,10 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#FBFBFA] text-[#0A0D14] flex flex-col font-sans selection:bg-[#0052FF] selection:text-white">
       {/* Navigation */}
-      <Navbar onOpenBooking={() => handleOpenBooking()} />
+      <Navbar
+        onOpenBooking={() => handleOpenBooking()}
+        onOpenDownload={() => setDownloadModalOpen(true)}
+      />
 
       {/* Main Content Sections */}
       <main className="flex-1">
@@ -73,6 +78,12 @@ export default function App() {
         isOpen={bookingModalOpen}
         onClose={() => setBookingModalOpen(false)}
         selectedPlan={selectedPlanForBooking}
+      />
+
+      {/* cPanel Hosting Download Modal */}
+      <DownloadModal
+        isOpen={downloadModalOpen}
+        onClose={() => setDownloadModalOpen(false)}
       />
 
       {/* Floating 24/7 WhatsApp Chat Support Widget */}
