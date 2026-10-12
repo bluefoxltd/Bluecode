@@ -32,7 +32,7 @@ export const MetricsSection: React.FC = () => {
           hour12: true,
         };
         setKathmanduTime(new Intl.DateTimeFormat('en-US', options).format(now));
-      } catch (err) {
+      } catch {
         setKathmanduTime(new Date().toLocaleTimeString());
       }
     };
@@ -58,44 +58,44 @@ export const MetricsSection: React.FC = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative py-28 lg:py-36 bg-white border-t border-slate-200/80">
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
+    <section ref={sectionRef} className="relative py-24 lg:py-32 bg-[#070B16] border-t border-slate-800 transition-colors">
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-12 relative z-10">
         {/* Header with live Kathmandu clock */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16 lg:mb-24">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-14 lg:mb-20">
           <div>
-            <div className="inline-flex items-center gap-3 text-xs font-semibold tracking-wider uppercase text-slate-500 mb-4">
-              <span className="w-8 h-px bg-[#0052FF]" />
+            <div className="inline-flex items-center gap-3 text-xs font-semibold tracking-wider uppercase text-[#6495ED] mb-4">
+              <span className="w-8 h-px bg-[#6495ED]" />
               <span>Our Impact</span>
             </div>
-            <h2 className="text-4xl lg:text-6xl font-bold tracking-tight text-[#002068] leading-tight">
+            <h2 className="text-4xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
               Results you <br />
-              can measure.
+              <span className="text-[#6495ED]">can measure.</span>
             </h2>
           </div>
 
-          <div className="flex items-center gap-4 text-xs lg:text-sm font-medium text-slate-600 bg-slate-50 border border-slate-200/80 px-4 py-2.5 rounded-full self-start lg:self-auto">
+          <div className="flex items-center gap-4 text-xs lg:text-sm font-medium text-slate-300 bg-slate-900 border border-slate-800 px-4 py-2.5 rounded-full self-start lg:self-auto shadow-2xs">
             <span className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               <span>Kathmandu, Nepal</span>
             </span>
-            <span className="text-slate-300">|</span>
-            <span className="font-mono font-semibold text-slate-900">{kathmanduTime || '5:45 PM'} NPT</span>
+            <span className="text-slate-700">|</span>
+            <span className="font-mono font-semibold text-[#6495ED]">{kathmanduTime || '5:45 PM'} NPT</span>
           </div>
         </div>
 
         {/* 4-Grid Metric Counters */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-slate-200 border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
-          {metrics.map((metric, idx) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-slate-800 border border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+          {metrics.map((metric) => (
             <div
               key={metric.label}
-              className="bg-white p-8 lg:p-12 flex flex-col justify-between hover:bg-slate-50/50 transition-colors"
+              className="bg-[#0C1222] p-8 lg:p-12 flex flex-col justify-between hover:bg-[#10182E] transition-colors"
             >
-              <div className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-[#002068] font-mono tabular-nums">
+              <div className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white font-mono tabular-nums">
                 {metric.prefix}
                 <Counter target={metric.value} start={hasAnimated} />
-                <span className="text-[#0052FF]">{metric.suffix}</span>
+                <span className="text-[#6495ED]">{metric.suffix}</span>
               </div>
-              <div className="mt-4 text-sm lg:text-base font-medium text-slate-600">
+              <div className="mt-4 text-sm lg:text-base font-medium text-slate-300">
                 {metric.label}
               </div>
             </div>
@@ -106,30 +106,28 @@ export const MetricsSection: React.FC = () => {
   );
 };
 
-// Count up helper
 const Counter: React.FC<{ target: number; start: boolean }> = ({ target, start }) => {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
     if (!start) return;
-    let current = 0;
-    const duration = 1500;
-    const stepTime = 30;
-    const steps = duration / stepTime;
-    const increment = target / steps;
 
-    const timer = setInterval(() => {
-      current += increment;
-      if (current >= target) {
-        setCount(target);
-        clearInterval(timer);
-      } else {
-        setCount(Math.floor(current));
+    let startTime: number | null = null;
+    const duration = 1600; // ms
+
+    const step = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const easeOutQuad = (t: number) => t * (2 - t);
+      setCount(Math.floor(easeOutQuad(progress) * target));
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
       }
-    }, stepTime);
+    };
 
-    return () => clearInterval(timer);
-  }, [target, start]);
+    requestAnimationFrame(step);
+  }, [start, target]);
 
   return <span>{count}</span>;
 };

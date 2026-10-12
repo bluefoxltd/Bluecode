@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { BlueCodeLogo } from './BlueCodeLogo';
-import { Menu, X, ArrowUpRight } from 'lucide-react';
+import { Menu, X, ArrowUpRight, FileDown } from 'lucide-react';
 
 interface NavbarProps {
   onOpenBooking: () => void;
-  onOpenDownload?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenDownload }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -20,130 +19,103 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onOpenDownload })
   }, []);
 
   const navLinks = [
-    { name: 'Services', href: '#features' },
-    { name: 'Process', href: '#how-it-works' },
+    { name: 'Services', href: '#services' },
+    { name: 'Inquire & Receipt', href: '#inquiry' },
+    { name: 'Tools Ecosystem', href: '#tools' },
     { name: 'Studio', href: '#studio' },
     { name: 'Work', href: '#work' },
     { name: 'Packages', href: '#pricing' },
   ];
 
-  const handleWhatsAppDirect = () => {
-    window.open('https://wa.me/9779715971505', '_blank', 'noopener,noreferrer');
-  };
-
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-white/85 backdrop-blur-md border-b border-slate-200/80 shadow-xs'
-          : 'bg-transparent border-b border-slate-900/5'
+          ? 'bg-[#060913]/92 backdrop-blur-md border-b border-slate-800/80 shadow-md'
+          : 'bg-transparent border-b border-white/5'
       }`}
     >
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-        <div className={`flex items-center justify-between gap-8 transition-all duration-300 ${scrolled ? 'h-16' : 'h-20 lg:h-24'}`}>
-          {/* Zone 1: Brand Mark */}
+        <div className={`flex items-center justify-between gap-8 transition-all duration-300 ${scrolled ? 'h-16' : 'h-20 lg:h-22'}`}>
+          {/* Zone 1: Brand Mark with transparent bluecode.png logo */}
           <a href="#" className="flex items-center group shrink-0" aria-label="Blue Code Home">
-            <BlueCodeLogo size={scrolled ? 34 : 40} showText={true} />
+            <BlueCodeLogo size={scrolled ? 38 : 46} />
           </a>
 
-          {/* Zone 2: Navigation Links */}
-          <nav className="hidden md:flex items-center gap-8 lg:gap-10 text-sm font-medium text-slate-600">
+          {/* Zone 2: Navigation Links with Cornflower Blue hover */}
+          <nav className="hidden md:flex items-center gap-7 lg:gap-9 text-sm font-medium text-slate-300">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
-                className="whitespace-nowrap shrink-0 hover:text-[#0052FF] transition-colors relative py-1 group"
+                className="whitespace-nowrap shrink-0 hover:text-[#6495ED] transition-colors relative py-1 group"
               >
                 {link.name}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#0052FF] transition-all duration-300 group-hover:w-full" />
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#6495ED] transition-all duration-300 group-hover:w-full" />
               </a>
             ))}
-            {onOpenDownload && (
-              <button
-                type="button"
-                onClick={onOpenDownload}
-                className="whitespace-nowrap shrink-0 text-[#0052FF] font-semibold hover:text-[#002068] transition-colors relative py-1"
-              >
-                cPanel ZIP
-              </button>
-            )}
           </nav>
 
-          {/* Zone 3: 1 Primary Action */}
+          {/* Zone 3: Actions with Cornflower Blue (#6495ED) */}
           <div className="hidden md:flex items-center gap-3 shrink-0">
-            {onOpenDownload && (
-              <a
-                href="/bluecode-cpanel-ready.zip"
-                download="bluecode-cpanel-ready.zip"
-                className="hidden lg:inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-full border border-slate-300 text-slate-700 hover:border-[#002068] hover:bg-slate-50 transition"
-                title="Download production zip for cPanel"
-              >
-                <span>cPanel ZIP</span>
-              </a>
-            )}
             <button
-              onClick={handleWhatsAppDirect}
-              className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-white bg-[#002068] hover:bg-[#0052FF] rounded-full transition-all duration-300 whitespace-nowrap shrink-0 shadow-sm hover:shadow-md"
+              onClick={onOpenBooking}
+              className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white bg-[#6495ED] hover:bg-[#5383db] rounded-full transition-all duration-200 whitespace-nowrap shrink-0 shadow-md shadow-[#6495ED]/20 active:scale-95 cursor-pointer"
             >
-              <span>Start a Project</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
+              <FileDown className="w-3.5 h-3.5" />
+              <span>Inquire &amp; Receipt</span>
             </button>
           </div>
 
-          {/* Mobile hamburger button */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 text-slate-800 hover:text-[#0052FF] focus:outline-none"
-            aria-label="Toggle navigation menu"
-          >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          {/* Mobile Right Controls: Menu Button */}
+          <div className="md:hidden flex items-center gap-2">
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 text-slate-200 hover:text-[#6495ED] focus:outline-none"
+              aria-label="Toggle navigation menu"
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Mobile menu dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white/98 backdrop-blur-xl border-b border-slate-200 px-6 py-6 shadow-xl animate-fade-in">
+        <div className="md:hidden bg-[#060913]/98 backdrop-blur-xl border-b border-slate-800 px-6 py-6 shadow-2xl animate-fade-in">
           <nav className="flex flex-col gap-4 mb-6">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-base font-semibold text-slate-800 hover:text-[#0052FF] py-2 border-b border-slate-100"
+                className="text-base font-semibold text-slate-100 hover:text-[#6495ED] py-2 border-b border-slate-800/60"
               >
                 {link.name}
               </a>
             ))}
           </nav>
           <div className="flex flex-col gap-3">
-            <a
-              href="/bluecode-cpanel-ready.zip"
-              download="bluecode-cpanel-ready.zip"
-              onClick={() => setMobileMenuOpen(false)}
-              className="w-full flex items-center justify-center gap-2 py-3 text-sm font-semibold rounded-full bg-blue-50 text-[#002068] border border-blue-200 hover:bg-blue-100 transition"
-            >
-              <span>Download cPanel ZIP</span>
-            </a>
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                handleWhatsAppDirect();
-              }}
-              className="w-full flex items-center justify-center gap-2 py-3.5 text-sm font-semibold rounded-full bg-[#002068] text-white hover:bg-[#0052FF] transition"
-            >
-              <span>Start a Project via WhatsApp</span>
-              <ArrowUpRight className="w-4 h-4" />
-            </button>
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
                 onOpenBooking();
               }}
-              className="w-full flex items-center justify-center gap-2 py-3 text-sm font-semibold rounded-full border border-slate-300 text-slate-700 hover:bg-slate-50 transition"
+              className="w-full flex items-center justify-center gap-2 py-3.5 text-sm font-bold rounded-full bg-[#6495ED] text-white hover:bg-[#5383db] transition shadow-lg shadow-[#6495ED]/20"
             >
-              <span>Book Consultation</span>
+              <FileDown className="w-4 h-4" />
+              <span>Client Inquiry &amp; Letterhead Receipt</span>
             </button>
+            <a
+              href="https://wa.me/9779715971505"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setMobileMenuOpen(false)}
+              className="w-full flex items-center justify-center gap-2 py-3 text-sm font-semibold rounded-full border border-slate-700 text-slate-300 hover:text-white hover:bg-slate-800 transition"
+            >
+              <span>Direct WhatsApp (+977 9715971505)</span>
+              <ArrowUpRight className="w-4 h-4" />
+            </a>
           </div>
         </div>
       )}

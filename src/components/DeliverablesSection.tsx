@@ -13,7 +13,7 @@ export const DeliverablesSection: React.FC = () => {
   const samples: ProjectSample[] = [
     {
       label: 'Brand Identity',
-      code: `Brand System: Apex Himalayas\n───────────────────────────────\nPrimary Color:    #002068 (Deep Navy)\nAccent Color:     #00D2FF (Electric Cyan)\nDisplay Font:     Plus Jakarta Sans\nBrand Personality: Premium, Modern, Authoritative\nLogo Package:     Vector SVG, Dark/Light marks, Favicon\nDesign Guidelines: 52-Page Master Document`,
+      code: `Brand System: Apex Himalayas\n───────────────────────────────\nPrimary Color:    #6495ED (Cornflower Blue)\nAccent Color:     #38BDF8 (Sky Luminous)\nDisplay Font:     Plus Jakarta Sans\nBrand Personality: Premium, Modern, Authoritative\nLogo Package:     Vector SVG, Dark/Light marks, Favicon\nDesign Guidelines: 52-Page Master Document`,
     },
     {
       label: 'Social Campaign',
@@ -51,29 +51,29 @@ export const DeliverablesSection: React.FC = () => {
   ];
 
   return (
-    <section id="work" className="relative py-28 lg:py-36 bg-[#FBFBFA] border-t border-slate-200/80">
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-        <div className="max-w-3xl mb-16 lg:mb-20">
-          <div className="inline-flex items-center gap-3 text-xs font-semibold tracking-wider uppercase text-slate-500 mb-4">
-            <span className="w-8 h-px bg-[#0052FF]" />
+    <section id="work" className="relative py-24 lg:py-32 bg-[#060913] border-t border-slate-800 transition-colors">
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-12 relative z-10">
+        <div className="max-w-3xl mb-14 lg:mb-18">
+          <div className="inline-flex items-center gap-3 text-xs font-semibold tracking-wider uppercase text-[#6495ED] mb-4">
+            <span className="w-8 h-px bg-[#6495ED]" />
             <span>Case Study Deliverables</span>
           </div>
-          <h2 className="text-4xl lg:text-6xl font-bold tracking-tight text-[#002068]">
+          <h2 className="text-4xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
             Work that drives <br />
-            <span className="text-[#0052FF]">tangible value.</span>
+            <span className="text-[#6495ED]">tangible value.</span>
           </h2>
         </div>
 
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           {/* Left Column: 4 Core Agency Guarantees */}
           <div className="lg:col-span-5 space-y-8">
-            <div className="grid sm:grid-cols-2 lg:grid-cols-1 gap-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-1 gap-5">
               {guarantees.map((item) => (
-                <div key={item.title} className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
-                  <h4 className="text-base font-bold text-[#002068] mb-1">
+                <div key={item.title} className="p-6 rounded-2xl bg-[#0A0F1F] border border-slate-800 shadow-sm">
+                  <h4 className="text-base font-bold text-white mb-1.5">
                     {item.title}
                   </h4>
-                  <p className="text-xs lg:text-sm text-slate-600 leading-relaxed">
+                  <p className="text-xs lg:text-sm text-slate-300 leading-relaxed">
                     {item.desc}
                   </p>
                 </div>
@@ -83,9 +83,9 @@ export const DeliverablesSection: React.FC = () => {
             <div className="pt-2">
               <a
                 href="#pricing"
-                className="inline-flex items-center gap-2 text-sm font-bold text-[#0052FF] hover:text-[#002068] transition"
+                className="inline-flex items-center gap-2 text-sm font-bold text-[#6495ED] hover:text-[#82aaff] transition"
               >
-                <span>Explore packages & pricing</span>
+                <span>Explore packages &amp; pricing</span>
                 <ArrowRight className="w-4 h-4" />
               </a>
             </div>
@@ -93,18 +93,18 @@ export const DeliverablesSection: React.FC = () => {
 
           {/* Right Column: Interactive Terminal Preview */}
           <div className="lg:col-span-7">
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden">
+            <div className="bg-[#0A0F1F] rounded-2xl border border-slate-800 shadow-xl overflow-hidden">
               {/* Tab Selector Bar */}
-              <div className="px-6 py-3 border-b border-slate-200 bg-slate-50/80 flex items-center justify-between">
+              <div className="px-6 py-3 border-b border-slate-800 bg-[#080D1A] flex items-center justify-between">
                 <div className="flex items-center gap-2 overflow-x-auto">
                   {samples.map((s, idx) => (
                     <button
                       key={s.label}
                       onClick={() => setActiveTab(idx)}
-                      className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all ${
+                      className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
                         activeTab === idx
-                          ? 'bg-white text-[#0052FF] shadow-xs border border-slate-200'
-                          : 'text-slate-600 hover:text-slate-900'
+                          ? 'bg-slate-800 text-[#6495ED] shadow-xs border border-slate-700'
+                          : 'text-slate-400 hover:text-slate-200'
                       }`}
                     >
                       {s.label}
@@ -114,13 +114,13 @@ export const DeliverablesSection: React.FC = () => {
 
                 <button
                   onClick={handleCopy}
-                  className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-500 hover:text-[#0052FF] transition rounded-md hover:bg-white"
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-400 hover:text-[#6495ED] transition rounded-md hover:bg-slate-800 cursor-pointer"
                   title="Copy details"
                 >
                   {copied ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-emerald-600" />
-                      <span className="text-emerald-600 font-semibold">Copied</span>
+                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                      <span className="text-emerald-400 font-semibold">Copied</span>
                     </>
                   ) : (
                     <>
@@ -131,24 +131,9 @@ export const DeliverablesSection: React.FC = () => {
                 </button>
               </div>
 
-              {/* Code display */}
-              <div className="p-8 font-mono text-xs sm:text-sm leading-loose bg-[#001036] text-white min-h-[260px] overflow-x-auto">
-                {samples[activeTab].code.split('\n').map((line, idx) => (
-                  <div key={`${activeTab}-${idx}`} className="dev-code-line flex" style={{ animationDelay: `${idx * 50}ms` }}>
-                    <span className="w-8 text-white/30 select-none shrink-0 text-xs">
-                      {idx + 1}
-                    </span>
-                    <span className={line.includes('──') ? 'text-cyan-400/50' : line.includes(':') ? 'text-cyan-200' : 'text-white'}>
-                      {line}
-                    </span>
-                  </div>
-                ))}
-              </div>
-
-              {/* Terminal Footer */}
-              <div className="px-6 py-3.5 bg-slate-50 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
-                <span>Verified Client Architecture</span>
-                <span className="font-semibold text-slate-700">Blue Code Studio · Nepal</span>
+              {/* Terminal Code Display */}
+              <div className="p-6 font-mono text-xs sm:text-sm text-slate-300 leading-relaxed overflow-x-auto whitespace-pre">
+                {samples[activeTab].code}
               </div>
             </div>
           </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Phone } from 'lucide-react';
 
 interface CtaSectionProps {
   onOpenBooking: () => void;
@@ -15,7 +15,6 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenBooking }) => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // ASCII characters identical to curradigital.com
     const chars = '░▒▓█▀▄▌▐│─┤├┴┬╭╮╰╯';
     let step = 0;
 
@@ -30,7 +29,7 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenBooking }) => {
     resize();
     window.addEventListener('resize', resize);
 
-    // 3D Tetrahedron / Pyramid vertices (centered geometry)
+    // 3D Tetrahedron / Pyramid vertices
     const vertices = [
       { x: 0, y: 1.1, z: 0 },
       { x: -0.95, y: -0.4, z: -0.55 },
@@ -38,13 +37,11 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenBooking }) => {
       { x: 0, y: -0.4, z: 1.0 },
     ];
 
-    // Edges between vertices
     const edges = [
       [0, 1], [0, 2], [0, 3],
       [1, 2], [2, 3], [3, 1],
     ];
 
-    // Triangular faces
     const faces = [
       [0, 1, 2],
       [0, 2, 3],
@@ -52,7 +49,6 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenBooking }) => {
       [1, 3, 2],
     ];
 
-    // 3-axis rotation transforms matching Curra Digital exactly
     const rotX = (e: { x: number; y: number; z: number }, t: number) => ({
       x: e.x * Math.cos(t) - e.z * Math.sin(t),
       y: e.y,
@@ -96,51 +92,43 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenBooking }) => {
             z: p1.z + (p2.z - p1.z) * t,
           };
           const rotated = rotZ(rotY(rotX(pt, 0.4 * step), 0.3 * step), 0.2 * step);
-          const depth = (rotated.z + 1.5) / 3;
-          const charIdx = Math.max(0, Math.min(chars.length - 1, Math.floor(depth * (chars.length - 1))));
-          points.push({
-            x: cx + rotated.x * scale,
-            y: cy - rotated.y * scale,
-            z: rotated.z,
-            char: chars[charIdx],
-          });
+          const char = chars[Math.floor(Math.abs(rotated.z * 7 + t * 5)) % chars.length];
+          points.push({ ...rotated, char });
         }
       });
 
-      // Render face lattice with subtle ASCII shading
-      faces.forEach(([i, j, k]) => {
-        const v1 = vertices[i];
-        const v2 = vertices[j];
-        const v3 = vertices[k];
-        for (let u = 0; u <= 1; u += 0.1) {
-          for (let v = 0; v <= 1 - u; v += 0.1) {
+      // Sample interior face surfaces
+      faces.forEach(([a, b, c]) => {
+        const p1 = vertices[a];
+        const p2 = vertices[b];
+        const p3 = vertices[c];
+        for (let u = 0; u <= 1; u += 0.12) {
+          for (let v = 0; v <= 1 - u; v += 0.12) {
             const w = 1 - u - v;
             const pt = {
-              x: v1.x * u + v2.x * v + v3.x * w,
-              y: v1.y * u + v2.y * v + v3.y * w,
-              z: v1.z * u + v2.z * v + v3.z * w,
+              x: p1.x * u + p2.x * v + p3.x * w,
+              y: p1.y * u + p2.y * v + p3.y * w,
+              z: p1.z * u + p2.z * v + p3.z * w,
             };
             const rotated = rotZ(rotY(rotX(pt, 0.4 * step), 0.3 * step), 0.2 * step);
-            const depth = (rotated.z + 1.5) / 3;
-            const charIdx = Math.max(0, Math.min(chars.length - 1, Math.floor(depth * (chars.length - 1))));
-            points.push({
-              x: cx + rotated.x * scale,
-              y: cy - rotated.y * scale,
-              z: rotated.z,
-              char: chars[charIdx],
-            });
+            const char = chars[Math.floor(Math.abs(rotated.z * 5)) % chars.length];
+            points.push({ ...rotated, char });
           }
         }
       });
 
       // Sort points back to front
-      points.sort((a, b) => a.z - b.z);
+      points.sort((p1, p2) => p1.z - p2.z);
 
-      // Draw each ASCII character with depth opacity matching Curra Digital
+      // Draw projected ASCII characters with Cornflower Blue tones (#6495ED)
       points.forEach((p) => {
-        const alpha = Math.min(0.9, 0.15 + (p.z + 1.5) * 0.25);
-        ctx.fillStyle = `rgba(0, 32, 104, ${alpha})`;
-        ctx.fillText(p.char, p.x, p.y);
+        const x = cx + p.x * scale;
+        const y = cy - p.y * scale;
+        const depthNorm = (p.z + 1.5) / 3;
+        const alpha = Math.max(0.12, Math.min(0.95, depthNorm));
+
+        ctx.fillStyle = `rgba(100, 149, 237, ${alpha})`;
+        ctx.fillText(p.char, x, y);
       });
 
       step += 0.015;
@@ -156,60 +144,62 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenBooking }) => {
   }, []);
 
   const handleStartProject = () => {
-    const text = encodeURIComponent(
-      "Hello Blue Code! I would like to book a free discovery call and discuss building our brand."
-    );
-    window.open(`https://wa.me/9779715971505?text=${text}`, '_blank', 'noopener,noreferrer');
+    const el = document.getElementById('inquiry');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      onOpenBooking();
+    }
   };
 
   return (
-    <section id="cta" className="relative py-24 lg:py-32 bg-[#FBFBFA]">
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-        {/* Bordered box matching Image 1 100% */}
-        <div className="relative border border-slate-200/90 bg-white p-10 sm:p-14 lg:p-24 overflow-hidden">
-          {/* Top-Right and Bottom-Left architectural corner lines */}
-          <div className="absolute top-0 right-0 w-32 h-32 border-b border-l border-[#002068]/10 pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-32 h-32 border-t border-r border-[#002068]/10 pointer-events-none" />
+    <section id="cta" className="relative py-20 lg:py-28 bg-[#060913] transition-colors border-t border-slate-800">
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-12 relative z-10">
+        <div className="relative border border-slate-800 bg-[#0C1222] p-8 sm:p-12 lg:p-20 rounded-3xl overflow-hidden shadow-2xl">
+          {/* Top-Right and Bottom-Left architectural corner lines with #6495ED */}
+          <div className="absolute top-0 right-0 w-32 h-32 border-b border-l border-[#6495ED]/20 pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-32 h-32 border-t border-r border-[#6495ED]/20 pointer-events-none" />
 
           <div className="flex flex-col lg:flex-row items-center justify-between gap-12 relative z-10">
             {/* Left Content */}
             <div className="flex-1">
-              <h2 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-[#0A0D14] mb-8 leading-[0.98]">
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6 leading-[1.02]">
                 Ready to build <br />
-                <span className="text-[#002068]">your brand?</span>
+                <span className="text-[#6495ED]">your brand?</span>
               </h2>
 
-              <p className="text-lg lg:text-xl text-slate-600 mb-12 leading-relaxed max-w-xl">
-                Let's create something extraordinary together. Book a free discovery call and tell us about your vision.
+              <p className="text-base sm:text-lg text-slate-300 mb-8 leading-relaxed max-w-xl">
+                Let's create something extraordinary together. Submit your inquiry below for an instant official PDF letterhead receipt, or book a free discovery call.
               </p>
 
-              {/* Two Pill Buttons matching Image 1 */}
+              {/* Two Pill Buttons with #6495ED */}
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                 <button
                   type="button"
                   onClick={handleStartProject}
-                  className="bg-[#002068] hover:bg-[#0038D1] text-white px-8 h-14 text-base font-semibold rounded-full group inline-flex items-center justify-center gap-2 transition-all duration-300 shadow-sm"
+                  className="bg-[#6495ED] hover:bg-[#5383db] text-white px-8 h-13 text-sm sm:text-base font-bold rounded-full group inline-flex items-center justify-center gap-2 transition-all duration-300 shadow-lg shadow-[#6495ED]/25 cursor-pointer active:scale-95"
                 >
-                  <span>Start a Project</span>
+                  <span>Start Inquiry &amp; Get Receipt</span>
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </button>
 
                 <a
                   href="tel:+9779715971505"
-                  className="h-14 px-8 text-base font-medium text-slate-900 rounded-full border border-slate-200 hover:border-slate-300 hover:bg-slate-50 inline-flex items-center justify-center transition-all duration-300"
+                  className="h-13 px-8 text-sm sm:text-base font-semibold text-white rounded-full border border-slate-700 hover:border-[#6495ED] hover:bg-slate-800 inline-flex items-center justify-center gap-2 transition-all duration-300"
                 >
-                  Call Us
+                  <Phone className="w-4 h-4 text-[#6495ED]" />
+                  <span>Call +977 9715971505</span>
                 </a>
               </div>
 
-              {/* Footnote matching Image 1 */}
-              <p className="text-sm text-slate-500 mt-8 font-medium">
-                Free consultation · No commitment required
+              {/* Footnote */}
+              <p className="text-xs text-slate-400 mt-6 font-medium">
+                ⚡ Instant downloadable receipt · Free 30-min discovery call · Kathmandu, Nepal
               </p>
             </div>
 
             {/* Right: 3D Rotating Triangle/Tetrahedron ASCII Canvas */}
-            <div className="hidden lg:flex items-center justify-center w-[480px] h-[480px] -mr-8 shrink-0">
+            <div className="hidden lg:flex items-center justify-center w-[440px] h-[440px] -mr-6 shrink-0">
               <canvas
                 ref={canvasRef}
                 className="w-full h-full"

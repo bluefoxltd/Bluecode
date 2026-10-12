@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { ThemeProvider } from './context/ThemeContext';
+import { BackgroundDots } from './components/BackgroundDots';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
 import { FeaturesSection } from './components/FeaturesSection';
@@ -8,41 +10,40 @@ import { MetricsSection } from './components/MetricsSection';
 import { IntegrationsSection } from './components/IntegrationsSection';
 import { SecuritySection } from './components/SecuritySection';
 import { DeliverablesSection } from './components/DeliverablesSection';
+import { InquirySection } from './components/InquirySection';
 import { PricingSection } from './components/PricingSection';
 import { CtaSection } from './components/CtaSection';
 import { FooterSection } from './components/FooterSection';
 import { BookingModal } from './components/BookingModal';
-import { DownloadModal } from './components/DownloadModal';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 
-export default function App() {
+function AppContent() {
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
-  const [downloadModalOpen, setDownloadModalOpen] = useState(false);
-  const [selectedPlanForBooking, setSelectedPlanForBooking] = useState('Enterprise Custom');
+  const [selectedPlanForBooking, setSelectedPlanForBooking] = useState('01. Brand Identity');
 
   const handleOpenBooking = (planOrService?: string) => {
     if (planOrService) {
       setSelectedPlanForBooking(planOrService);
     } else {
-      setSelectedPlanForBooking('Enterprise Custom');
+      setSelectedPlanForBooking('01. Brand Identity');
     }
     setBookingModalOpen(true);
   };
 
   return (
-    <div className="min-h-screen bg-[#FBFBFA] text-[#0A0D14] flex flex-col font-sans selection:bg-[#0052FF] selection:text-white">
-      {/* Navigation */}
-      <Navbar
-        onOpenBooking={() => handleOpenBooking()}
-        onOpenDownload={() => setDownloadModalOpen(true)}
-      />
+    <div className="min-h-screen bg-[#060913] text-slate-100 flex flex-col font-sans selection:bg-[#6495ED] selection:text-white relative">
+      {/* Background Dots with Cornflower Blue accents */}
+      <BackgroundDots isDark={true} />
+
+      {/* Navigation (Permanent Dark Mode with #6495ED styling) */}
+      <Navbar onOpenBooking={() => handleOpenBooking()} />
 
       {/* Main Content Sections */}
-      <main className="flex-1">
-        {/* Hero Section with 3D ASCII Sphere and Live Marquee */}
-        <HeroSection onOpenBooking={() => handleOpenBooking()} />
+      <main className="flex-1 relative z-10">
+        {/* Hero Section with 2x Enlarged Headline, 2x Holographic Globe, Tight Fit without gaps */}
+        <HeroSection onOpenBooking={handleOpenBooking} />
 
-        {/* 01-05 Services / Capabilities */}
+        {/* 01–12 Complete Services / Capabilities List */}
         <FeaturesSection onOpenBooking={handleOpenBooking} />
 
         {/* 3-Step Process (Discover, Design, Launch) with Live Markdown Code Simulator */}
@@ -54,7 +55,7 @@ export default function App() {
         {/* Results you can measure & Kathmandu, Nepal live clock */}
         <MetricsSection />
 
-        {/* Tools & Production Ecosystem Infinite Dual-Marquee */}
+        {/* Tools & Platforms Section with animated transparent PNGs (design software tools.png & tech stack.png) */}
         <IntegrationsSection />
 
         {/* Principles & Standards of Craft */}
@@ -63,31 +64,36 @@ export default function App() {
         {/* Our Work: Case Study Deliverables Interactive Code Terminal */}
         <DeliverablesSection />
 
-        {/* Packages & Pricing: Essentials NPR 2,500, Growth NPR 3,500, 20% annual discount, Enterprise Custom */}
+        {/* Dedicated Client Inquiry Form & Instant PDF Letterhead Receipt Generator */}
+        <InquirySection />
+
+        {/* Packages & Pricing: Essentials NPR 2,500, Growth NPR 3,500, Enterprise Custom */}
         <PricingSection onOpenBooking={handleOpenBooking} />
 
         {/* 3D ASCII Tetrahedron Interactive CTA Section */}
-        <CtaSection onOpenBooking={() => handleOpenBooking('General Consultation')} />
+        <CtaSection onOpenBooking={() => handleOpenBooking('01. Brand Identity')} />
       </main>
 
-      {/* Footer with Blue Code branding, Kathmandu, Nepal, and ASCII Wave matrix */}
+      {/* Footer with info@bluecode.agency, +977 9715971505, bluecode.png logo */}
       <FooterSection />
 
-      {/* Interactive Consultation & WhatsApp Booking Modal */}
+      {/* Client Inquiry & Instant PDF Receipt Modal */}
       <BookingModal
         isOpen={bookingModalOpen}
         onClose={() => setBookingModalOpen(false)}
         selectedPlan={selectedPlanForBooking}
       />
 
-      {/* cPanel Hosting Download Modal */}
-      <DownloadModal
-        isOpen={downloadModalOpen}
-        onClose={() => setDownloadModalOpen(false)}
-      />
-
       {/* Floating 24/7 WhatsApp Chat Support Widget */}
       <FloatingWhatsApp onOpenBooking={() => handleOpenBooking()} />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }

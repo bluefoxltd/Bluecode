@@ -1,114 +1,83 @@
 import React, { useState } from 'react';
-import { Palette, Layers, Share2, Globe, TrendingUp, CheckCircle2, ArrowRight } from 'lucide-react';
-
-interface ServiceItem {
-  number: string;
-  title: string;
-  description: string;
-  deliverables: string[];
-  icon: React.ElementType;
-}
+import { CheckCircle2, ArrowRight, Sparkles } from 'lucide-react';
+import { ALL_SERVICES } from '../data/services';
 
 export const FeaturesSection: React.FC<{ onOpenBooking: (serviceName?: string) => void }> = ({ onOpenBooking }) => {
   const [activeService, setActiveService] = useState<number>(0);
 
-  const services: ServiceItem[] = [
-    {
-      number: '01',
-      title: 'Brand Identity',
-      description: 'From logo design to complete brand guidelines, we build cohesive visual systems that tell your story and leave an indelible impression.',
-      deliverables: ['Logo & Visual Marks', 'Comprehensive Style Guide', 'Typography & Color Tokens', 'Voice & Tone Guidelines'],
-      icon: Palette,
-    },
-    {
-      number: '02',
-      title: 'Graphic Design',
-      description: 'Striking print and digital collateral — presentations, packaging, brochures, and marketing kits — crafted with precision and creative flair.',
-      deliverables: ['Pitch Decks & Keynotes', 'Packaging & Print Assets', 'Marketing Collateral Suite', 'Digital Signage & Display'],
-      icon: Layers,
-    },
-    {
-      number: '03',
-      title: 'Social Media Management',
-      description: 'Strategic content creation, community engagement, and analytics-driven campaigns that grow your audience and amplify your brand voice.',
-      deliverables: ['Editorial Calendar Planning', 'High-Impact Creative Content', 'Community Management', 'Monthly Analytics & Growth Reports'],
-      icon: Share2,
-    },
-    {
-      number: '04',
-      title: 'Web Development',
-      description: 'Beautiful, high-performance websites and digital platforms designed to convert visitors into loyal, paying customers.',
-      deliverables: ['Modern Next.js / React Architecture', 'Mobile-Responsive UX/UI', 'High Core Web Vitals Performance', 'CMS & SEO Optimization'],
-      icon: Globe,
-    },
-    {
-      number: '05',
-      title: 'Ads Strategy',
-      description: 'Data-driven paid media campaigns across Google, Meta, and LinkedIn — maximising ROAS and reaching high-intent buyers.',
-      deliverables: ['Funnel Architecture', 'Ad Creative & Copywriting', 'Conversion Tracking & Pixels', 'Continuous A/B Budget Optimization'],
-      icon: TrendingUp,
-    },
-  ];
-
   return (
-    <section id="features" className="relative py-28 lg:py-36 border-t border-slate-200/80 bg-white">
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
+    <section id="services" className="relative py-24 lg:py-32 border-t border-slate-800 bg-[#070B16] transition-colors">
+      {/* Background Subtle Accent Glow */}
+      <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-[#6495ED]/10 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-12 relative z-10">
         {/* Section Header */}
-        <div className="max-w-3xl mb-16 lg:mb-24">
-          <div className="inline-flex items-center gap-3 text-xs font-semibold tracking-wider uppercase text-slate-500 mb-4">
-            <span className="w-8 h-px bg-[#0052FF]" />
-            <span>Our Core Capabilities</span>
+        <div className="max-w-3xl mb-14 lg:mb-20">
+          <div className="inline-flex items-center gap-3 text-xs font-semibold tracking-wider uppercase text-[#6495ED] mb-4">
+            <span className="w-8 h-px bg-[#6495ED]" />
+            <span className="flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-[#6495ED]" />
+              Our Complete Service Capabilities (1–12)
+            </span>
           </div>
-          <h2 className="text-4xl lg:text-6xl font-bold tracking-tight text-[#002068] leading-tight">
-            Full-spectrum brand <br />
-            <span className="text-[#0052FF]">development.</span>
+          <h2 className="text-4xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
+            Full-spectrum brand, design &amp; <br />
+            <span className="text-[#6495ED]">software engineering.</span>
           </h2>
-          <p className="mt-4 text-base lg:text-lg text-slate-600 max-w-xl">
-            We bridge the gap between world-class brand aesthetic and high-performance technical engineering for businesses ready to dominate their space.
+          <p className="mt-4 text-base lg:text-lg text-slate-300 max-w-2xl leading-relaxed">
+            From strategic brand identity and print collateral to custom web platforms and mobile applications, Blue Code delivers the full end-to-end creative and technical lifecycle.
           </p>
         </div>
 
-        {/* Services Accordion / List */}
-        <div className="divide-y divide-slate-200/80 border-y border-slate-200/80">
-          {services.map((service, index) => {
+        {/* Services Accordion / List with all 12 services */}
+        <div className="divide-y divide-slate-800 border-y border-slate-800">
+          {ALL_SERVICES.map((service, index) => {
             const Icon = service.icon;
             const isSelected = activeService === index;
 
             return (
               <div
                 key={service.number}
-                className={`transition-colors duration-300 ${
-                  isSelected ? 'bg-slate-50/70' : 'hover:bg-slate-50/40'
+                className={`transition-colors duration-200 ${
+                  isSelected ? 'bg-slate-900/60' : 'hover:bg-slate-900/30'
                 }`}
               >
                 <div
                   onClick={() => setActiveService(index)}
-                  className="py-8 lg:py-10 cursor-pointer flex flex-col lg:flex-row lg:items-start justify-between gap-6 px-4 sm:px-6"
+                  className="py-6 lg:py-8 cursor-pointer flex flex-col lg:flex-row lg:items-start justify-between gap-6 px-4 sm:px-6"
                 >
-                  {/* Left: Number and Title */}
-                  <div className="flex items-start gap-6 lg:w-2/5">
-                    <span className="font-mono text-2xl lg:text-3xl font-bold text-slate-300 shrink-0">
+                  {/* Left: Number, Badge, Title and Tagline */}
+                  <div className="flex items-start gap-5 lg:w-5/12">
+                    <span className="font-mono text-xl lg:text-2xl font-bold text-slate-600 shrink-0">
                       {service.number}
                     </span>
                     <div>
-                      <div className="flex items-center gap-3 mb-2">
-                        <Icon className="w-5 h-5 text-[#0052FF]" />
-                        <h3 className="text-2xl lg:text-3xl font-bold text-[#002068] tracking-tight">
+                      <div className="flex items-center gap-3 mb-1.5 flex-wrap">
+                        <div className="w-8 h-8 rounded-lg bg-[#6495ED]/15 text-[#6495ED] flex items-center justify-center shrink-0">
+                          <Icon className="w-4 h-4" />
+                        </div>
+                        <h3 className="text-xl lg:text-2xl font-bold text-white tracking-tight">
                           {service.title}
                         </h3>
+                        <span className="text-[10px] font-mono font-semibold px-2.5 py-0.5 rounded-full bg-[#6495ED]/15 text-[#6495ED] border border-[#6495ED]/30">
+                          {service.badge}
+                        </span>
                       </div>
-                      <p className="text-sm lg:text-base text-slate-600 leading-relaxed max-w-md">
+                      <p className="text-xs font-medium text-[#6495ED]/90 mb-1">
+                        {service.tagline}
+                      </p>
+                      <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-lg">
                         {service.description}
                       </p>
                     </div>
                   </div>
 
                   {/* Right: Key Deliverables & Action */}
-                  <div className="lg:w-3/5 lg:pl-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 w-full">
+                  <div className="lg:w-7/12 lg:pl-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full">
                       {service.deliverables.map((item) => (
-                        <div key={item} className="flex items-center gap-2 text-xs text-slate-700 font-medium">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                        <div key={item} className="flex items-center gap-2 text-xs text-slate-300 font-medium">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                           <span>{item}</span>
                         </div>
                       ))}
@@ -117,9 +86,9 @@ export const FeaturesSection: React.FC<{ onOpenBooking: (serviceName?: string) =
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        onOpenBooking(service.title);
+                        onOpenBooking(`${service.number}. ${service.title}`);
                       }}
-                      className="shrink-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider text-[#0052FF] bg-blue-50 hover:bg-[#0052FF] hover:text-white transition-all whitespace-nowrap"
+                      className="shrink-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider text-white bg-[#6495ED] hover:bg-[#5383db] transition-all whitespace-nowrap shadow-md shadow-[#6495ED]/20 active:scale-95 cursor-pointer"
                     >
                       <span>Inquire</span>
                       <ArrowRight className="w-3 h-3" />
