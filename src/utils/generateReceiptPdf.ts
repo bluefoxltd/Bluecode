@@ -6,6 +6,7 @@ export interface InquiryFormData {
   phone: string;
   address: string;
   service: string;
+  startDateBS?: string;
   notes: string;
   referenceId?: string;
   createdAt?: string;
@@ -131,7 +132,7 @@ export function generateReceiptPdf(data: InquiryFormData): string {
   doc.line(margin, currentY + 2, margin + 45, currentY + 2);
 
   currentY += 8;
-  const clientInfoBoxHeight = 36;
+  const clientInfoBoxHeight = 44;
   doc.setFillColor(252, 253, 255);
   doc.setDrawColor(215, 225, 240);
   doc.roundedRect(margin, currentY, contentWidth, clientInfoBoxHeight, 2, 2, 'FD');
@@ -143,31 +144,39 @@ export function generateReceiptPdf(data: InquiryFormData): string {
   doc.setFontSize(8.5);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(80, 95, 125);
-  doc.text('Client Full Name:', col1X, currentY + 9);
+  doc.text('Client Full Name:', col1X, currentY + 8);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(15, 23, 42);
   doc.setFontSize(9.5);
-  doc.text(data.name || 'Valued Client', col1X + 32, currentY + 9);
+  doc.text(data.name || 'Valued Client', col1X + 32, currentY + 8);
 
   doc.setFontSize(8.5);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(80, 95, 125);
-  doc.text('WhatsApp / Phone:', col1X, currentY + 18);
+  doc.text('WhatsApp / Phone:', col1X, currentY + 17);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(15, 23, 42);
-  doc.text(data.phone || 'N/A', col1X + 32, currentY + 18);
+  doc.text(data.phone || 'N/A', col1X + 32, currentY + 17);
 
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(80, 95, 125);
-  doc.text('Physical Address:', col1X, currentY + 27);
+  doc.text('Physical Address:', col1X, currentY + 26);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(15, 23, 42);
-  doc.text(data.address || 'Kathmandu, Nepal', col1X + 32, currentY + 27);
+  doc.text(data.address || 'Kathmandu, Nepal', col1X + 32, currentY + 26);
+
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(80, 95, 125);
+  doc.text('Starting Date (BS):', col1X, currentY + 35);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(primaryR, primaryG, primaryB);
+  doc.text(data.startDateBS || 'Immediate Consultation', col1X + 32, currentY + 35);
 
   // Right Column: Service Requested
+  doc.setFontSize(8.5);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(80, 95, 125);
-  doc.text('Target Service:', col2X, currentY + 9);
+  doc.text('Target Service:', col2X, currentY + 8);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(primaryR, primaryG, primaryB);
   doc.setFontSize(8.5);
@@ -177,17 +186,24 @@ export function generateReceiptPdf(data: InquiryFormData): string {
   doc.setFontSize(8.5);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(80, 95, 125);
-  doc.text('Channel:', col2X, currentY + 18);
+  doc.text('Channel:', col2X, currentY + 17);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(15, 23, 42);
-  doc.text('Direct WhatsApp Inbound & Web Desk', col2X + 26, currentY + 18);
+  doc.text('Direct WhatsApp Inbound & Web Desk', col2X + 26, currentY + 17);
 
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(80, 95, 125);
-  doc.text('Country Code:', col2X, currentY + 27);
+  doc.text('Country Code:', col2X, currentY + 26);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(15, 23, 42);
-  doc.text('+977 (Nepal 🇳🇵)', col2X + 26, currentY + 27);
+  doc.text('+977 (Nepal 🇳🇵)', col2X + 26, currentY + 26);
+
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(80, 95, 125);
+  doc.text('Calendar Standard:', col2X, currentY + 35);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(15, 23, 42);
+  doc.text('Bikram Sambat (BS) Nepal', col2X + 32, currentY + 35);
 
   // Section 2: Inquiry Notes & Project Scope
   currentY += clientInfoBoxHeight + 10;
@@ -228,7 +244,7 @@ export function generateReceiptPdf(data: InquiryFormData): string {
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(7.5);
   doc.setTextColor(60, 75, 100);
-  doc.text('1. Our lead strategist will review your requirements and reach out via WhatsApp (+977 9715971505).', margin + 5, currentY + 12);
+  doc.text('1. Our lead strategist will review your requirements and reach out via WhatsApp (+977-9715971505).', margin + 5, currentY + 12);
   doc.text('2. You are entitled to a complimentary 30-minute discovery call and tailored scope estimate.', margin + 5, currentY + 16.5);
   doc.text('3. Please keep this receipt reference number handy for all follow-up correspondence.', margin + 5, currentY + 21);
 
@@ -283,7 +299,7 @@ export function generateReceiptPdf(data: InquiryFormData): string {
   doc.text('Contact:', contactX, footerY + 6.5);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(255, 255, 255);
-  doc.text('+977 9715971505', contactX + 13, footerY + 6.5);
+  doc.text('+977-9715971505', contactX + 13, footerY + 6.5);
 
   const webX = pageWidth - margin - 35;
   doc.setFont('helvetica', 'bold');

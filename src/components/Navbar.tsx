@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BlueCodeLogo } from './BlueCodeLogo';
-import { Menu, X, ArrowUpRight, FileDown } from 'lucide-react';
+import { Menu, X, ArrowUpRight, Calendar } from 'lucide-react';
 
 interface NavbarProps {
   onOpenBooking: () => void;
@@ -43,12 +43,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
           </a>
 
           {/* Zone 2: Navigation Links with Cornflower Blue hover */}
-          <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-sm font-medium text-slate-300">
+          <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-sm font-medium text-slate-300 transition-colors">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
-                className="whitespace-nowrap shrink-0 hover:text-[#6495ED] transition-colors relative py-1 group"
+                className="whitespace-nowrap shrink-0 transition-colors relative py-1 hover:text-[#6495ED] group"
               >
                 {link.name}
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#6495ED] transition-all duration-300 group-hover:w-full" />
@@ -56,22 +56,22 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
             ))}
           </nav>
 
-          {/* Zone 3: Actions with Cornflower Blue (#6495ED) */}
+          {/* Zone 3: Inquiry CTA */}
           <div className="hidden sm:flex items-center gap-3 shrink-0">
             <button
               onClick={onOpenBooking}
               className="inline-flex items-center justify-center gap-2 px-6 py-2.5 text-xs sm:text-sm font-bold uppercase tracking-wider text-white bg-[#6495ED] hover:bg-[#5383db] rounded-full transition-all duration-200 whitespace-nowrap shrink-0 shadow-md shadow-[#6495ED]/25 active:scale-95 cursor-pointer"
             >
-              <FileDown className="w-4 h-4" />
-              <span className="whitespace-nowrap">Inquiry Now</span>
+              <Calendar className="w-4 h-4" />
+              <span className="whitespace-nowrap">Book Now</span>
             </button>
           </div>
 
-          {/* Mobile Right Controls: Menu Button */}
-          <div className="lg:hidden flex items-center gap-2">
+          {/* Mobile Right Controls: Hamburger Menu Button */}
+          <div className="lg:hidden flex items-center">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-slate-200 hover:text-[#6495ED] focus:outline-none"
+              className="p-2 text-slate-200 hover:text-[#6495ED] focus:outline-none transition-colors"
               aria-label="Toggle navigation menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -83,13 +83,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
       {/* Mobile menu dropdown */}
       {mobileMenuOpen && (
         <div className="lg:hidden bg-[#060913]/98 backdrop-blur-xl border-b border-slate-800 px-6 py-6 shadow-2xl animate-fade-in">
-          <nav className="flex flex-col gap-3 mb-6">
+          <nav className="flex flex-col gap-2 mb-6">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-base font-semibold text-slate-100 hover:text-[#6495ED] py-2 border-b border-slate-800/60"
+                className="text-base font-semibold py-2.5 border-b border-slate-800/60 text-slate-100 hover:text-[#6495ED] transition-colors"
               >
                 {link.name}
               </a>
@@ -103,18 +103,18 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
               }}
               className="w-full flex items-center justify-center gap-2 py-3.5 text-sm font-bold rounded-full bg-[#6495ED] text-white hover:bg-[#5383db] transition shadow-lg shadow-[#6495ED]/20 whitespace-nowrap"
             >
-              <FileDown className="w-4 h-4" />
-              <span>Inquiry Now</span>
+              <Calendar className="w-4 h-4" />
+              <span>Book Now</span>
             </button>
             <a
               href="https://wa.me/9779715971505"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setMobileMenuOpen(false)}
-              className="w-full flex items-center justify-center gap-2 py-3 text-sm font-semibold rounded-full border border-slate-700 text-slate-300 hover:text-white hover:bg-slate-800 transition"
+              className="w-full flex items-center justify-center gap-2 py-3 text-sm font-semibold rounded-full border border-slate-700 text-slate-300 hover:text-white hover:bg-slate-800 transition whitespace-nowrap"
             >
-              <span>Direct WhatsApp (+977 9715971505)</span>
-              <ArrowUpRight className="w-4 h-4" />
+              <span>Direct WhatsApp (<span className="whitespace-nowrap">+977-9715971505</span>)</span>
+              <ArrowUpRight className="w-4 h-4 shrink-0" />
             </a>
           </div>
         </div>

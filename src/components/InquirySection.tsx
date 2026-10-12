@@ -3,11 +3,14 @@ import { Send, FileDown, CheckCircle2, Sparkles, MapPin, Phone, MessageSquare, A
 import { ALL_SERVICES, INVESTMENT_PACKAGES } from '../data/services';
 import { generateReceiptPdf, InquiryFormData } from '../utils/generateReceiptPdf';
 import { BlueCodeLogo } from './BlueCodeLogo';
+import { NepaliDatePicker } from './NepaliDatePicker';
+import { getDefaultNepaliDate } from '../utils/nepaliCalendar';
 
 export const InquirySection: React.FC<{ initialService?: string }> = ({ initialService }) => {
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [address, setAddress] = useState('');
+  const [startDateBS, setStartDateBS] = useState(getDefaultNepaliDate().formatted);
   const [service, setService] = useState(
     initialService || 'Investment Package: Growth Plan (Annual — NPR 2,800 / mo · NPR 33,600 / yr)'
   );
@@ -65,7 +68,7 @@ export const InquirySection: React.FC<{ initialService?: string }> = ({ initialS
       ? phoneNumber
       : `+977 ${phoneNumber.replace(/^\+?977\s*/, '')}`;
 
-    const refId = `BC-INQ-${Math.floor(100000 + Math.random() * 900000)}`;
+    const refId = `BC-BK-${Math.floor(100000 + Math.random() * 900000)}`;
     const now = new Date().toLocaleString('en-US', {
       day: 'numeric',
       month: 'short',
@@ -80,6 +83,7 @@ export const InquirySection: React.FC<{ initialService?: string }> = ({ initialS
       phone: fullPhone,
       address,
       service,
+      startDateBS,
       notes,
       referenceId: refId,
       createdAt: now,
@@ -88,18 +92,19 @@ export const InquirySection: React.FC<{ initialService?: string }> = ({ initialS
     // 1. Auto-download the PDF letterhead receipt instantly
     const fileName = generateReceiptPdf(formData);
 
-    // 2. Format WhatsApp inquiry message
+    // 2. Format WhatsApp booking message
     const formattedMessage =
-      `*🌟 NEW CLIENT INQUIRY — BLUE CODE*\n` +
+      `*🌟 NEW CLIENT BOOKING — BLUE CODE*\n` +
       `───────────────────────────\n` +
-      `*Receipt Ref:* ${refId}\n` +
+      `*Booking Ref:* ${refId}\n` +
       `*Client Name:* ${name}\n` +
       `*Phone/WhatsApp:* ${fullPhone}\n` +
       `*Location/Address:* ${address || 'Kathmandu, Nepal'}\n` +
+      `*Starting Date (BS):* ${startDateBS}\n` +
       `*Selected Service / Package:* ${service}\n` +
       `*Additional Notes:* ${notes || 'Standard project consultation requested'}\n` +
       `───────────────────────────\n` +
-      `*Official Letterhead Receipt:* Downloaded instantly on submission\n` +
+      `*Official Letterhead Receipt:* Downloaded instantly on booking\n` +
       `*Agency:* Blue Code · info@bluecode.agency`;
 
     const whatsappUrl = `https://wa.me/9779715971505?text=${encodeURIComponent(formattedMessage)}`;
@@ -166,7 +171,7 @@ export const InquirySection: React.FC<{ initialService?: string }> = ({ initialS
                 <div>
                   <h4 className="text-sm font-bold text-white">Direct WhatsApp Fast-Track</h4>
                   <p className="text-xs text-slate-400 mt-0.5">
-                    Instant message generation to our Kathmandu strategy desk (+977 9715971505) for priority response.
+                    Instant message generation to our Kathmandu strategy desk (<span className="whitespace-nowrap font-medium text-slate-300">+977-9715971505</span>) for priority response.
                   </p>
                 </div>
               </div>
@@ -185,12 +190,12 @@ export const InquirySection: React.FC<{ initialService?: string }> = ({ initialS
             </div>
 
             {/* Direct contact footnote */}
-            <div className="p-4 rounded-xl bg-slate-900/40 border border-slate-800 text-xs text-slate-400 flex items-center justify-between">
+            <div className="p-4 rounded-xl bg-slate-900/40 border border-slate-800 text-xs text-slate-400 flex flex-wrap items-center justify-between gap-2">
               <div>
                 <span className="text-slate-200 font-medium">Headquarters:</span> New Baneshwor, Kathmandu, Nepal
               </div>
-              <div className="font-mono text-[#6495ED] font-bold">
-                +977 9715971505
+              <div className="font-mono text-[#6495ED] font-bold whitespace-nowrap">
+                +977-9715971505
               </div>
             </div>
           </div>
@@ -201,10 +206,10 @@ export const InquirySection: React.FC<{ initialService?: string }> = ({ initialS
               <div className="flex items-center justify-between pb-6 mb-6 border-b border-white/10">
                 <div>
                   <span className="text-xs font-mono font-bold tracking-wider uppercase text-[#6495ED]">
-                    OFFICIAL INQUIRY FORM
+                    OFFICIAL BOOKING FORM
                   </span>
                   <h3 className="text-xl sm:text-2xl font-bold text-white mt-0.5">
-                    Client Details &amp; Scope
+                    Book Project &amp; Scope
                   </h3>
                 </div>
                 <div className="hidden sm:block">
@@ -218,7 +223,7 @@ export const InquirySection: React.FC<{ initialService?: string }> = ({ initialS
                     <CheckCircle2 className="w-8 h-8" />
                   </div>
                   <div>
-                    <h4 className="text-2xl font-bold text-white">Inquiry Received &amp; Receipt Generated!</h4>
+                    <h4 className="text-2xl font-bold text-white">Booking Confirmed &amp; Receipt Generated!</h4>
                     <p className="text-sm text-slate-300 mt-1 max-w-md mx-auto">
                       Your letterhead receipt <code className="text-[#6495ED] font-mono">{lastSubmitted.fileName}</code> was downloaded automatically.
                     </p>
@@ -228,6 +233,7 @@ export const InquirySection: React.FC<{ initialService?: string }> = ({ initialS
                     <div><span className="text-slate-500">REF:</span> {lastSubmitted.data.referenceId}</div>
                     <div><span className="text-slate-500">CLIENT:</span> {lastSubmitted.data.name}</div>
                     <div><span className="text-slate-500">PHONE:</span> {lastSubmitted.data.phone}</div>
+                    <div><span className="text-slate-500">START DATE (BS):</span> {lastSubmitted.data.startDateBS}</div>
                     <div><span className="text-slate-500">SCOPE:</span> {lastSubmitted.data.service}</div>
                   </div>
 
@@ -319,6 +325,14 @@ export const InquirySection: React.FC<{ initialService?: string }> = ({ initialS
                       />
                     </div>
                   </div>
+
+                  {/* Field: Inbuilt Nepali Dropdown Calendar Starting Date */}
+                  <NepaliDatePicker
+                    value={startDateBS}
+                    onChange={setStartDateBS}
+                    label="Project Starting Date (Nepali Calendar BS)"
+                    required
+                  />
 
                   {/* Field 4: Services & Investment Packages (Complete combined dropdown list with Monthly / Annual options) */}
                   <div>
@@ -453,7 +467,7 @@ export const InquirySection: React.FC<{ initialService?: string }> = ({ initialS
                     />
                   </div>
 
-                  {/* Submit Button: strictly 'Inquiry Now' with whitespace-nowrap as instructed */}
+                  {/* Submit Button: strictly 'Book Now' with whitespace-nowrap */}
                   <div className="pt-2">
                     <button
                       type="submit"
@@ -461,11 +475,11 @@ export const InquirySection: React.FC<{ initialService?: string }> = ({ initialS
                       className="w-full flex items-center justify-center gap-2.5 py-4 px-6 rounded-xl bg-[#6495ED] hover:bg-[#5383db] text-white font-bold text-sm transition-all duration-200 shadow-lg shadow-[#6495ED]/25 active:scale-[0.99] cursor-pointer whitespace-nowrap"
                     >
                       <Send className="w-4 h-4" />
-                      <span className="whitespace-nowrap">Inquiry Now</span>
+                      <span className="whitespace-nowrap">Book Now</span>
                       <ArrowRight className="w-4 h-4 ml-1" />
                     </button>
                     <p className="text-center text-[11px] text-slate-400 mt-2.5">
-                      ⚡ Instant auto-download of PDF receipt with Blue Code letterhead + Direct WhatsApp connection to +977 9715971505
+                      ⚡ Instant auto-download of PDF receipt with Blue Code letterhead + Direct WhatsApp connection to <span className="whitespace-nowrap font-medium text-slate-300">+977-9715971505</span>
                     </p>
                   </div>
                 </form>

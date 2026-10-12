@@ -130,10 +130,10 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
             href="https://wa.me/9779715971505"
             target="_blank"
             rel="noreferrer"
-            className="font-semibold text-[#0052FF] hover:underline flex items-center gap-1"
+            className="font-semibold text-[#0052FF] hover:underline flex items-center gap-1 whitespace-nowrap"
           >
-            <span>WhatsApp Support (+977 9715971505)</span>
-            <ExternalLink className="w-3 h-3" />
+            <span className="whitespace-nowrap">WhatsApp Support (+977-9715971505)</span>
+            <ExternalLink className="w-3 h-3 shrink-0" />
           </a>
         </div>
       </div>

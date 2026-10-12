@@ -4,7 +4,7 @@ interface BackgroundDotsProps {
   isDark?: boolean;
 }
 
-export const BackgroundDots: React.FC<BackgroundDotsProps> = ({ isDark = false }) => {
+export const BackgroundDots: React.FC<BackgroundDotsProps> = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const mouseRef = useRef<{ x: number; y: number; active: boolean }>({ x: -1000, y: -1000, active: false });
   const animFrameId = useRef<number>(0);
@@ -43,98 +43,68 @@ export const BackgroundDots: React.FC<BackgroundDotsProps> = ({ isDark = false }
       mouseRef.current.active = false;
     };
 
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseleave', handleMouseLeave);
 
-    // Dot grid configuration
-    const spacing = 28; // Distance between dots
-    const hoverRadius = 110; // Proximity to trigger subtle thin blue effect
-
-    // Store transient energy/decay values for interactive hover trails
-    // Map key: "col_row" -> energy: number (0 to 1), seed: number
-    const dotEnergyMap = new Map<string, { energy: number; seed: number }>();
-
+    const spacing = 32; // Responsive clean grid spacing
     let time = 0;
 
+    // Fixed deterministic pseudo-random seeds per grid point
+    const dotSeeds: Record<string, number> = {};
+    const getDotData = (x: number, y: number) => {
+      const key = `${x},${y}`;
+      if (!dotSeeds[key]) {
+        dotSeeds[key] = Math.abs(Math.sin(x * 12.9898 + y * 78.233) * 43758.5453);
+      }
+      return {
+        seed: dotSeeds[key],
+      };
+    };
+
     const render = () => {
+      time += 0.015;
       ctx.clearRect(0, 0, width, height);
+
+      const mouseX = mouseRef.current.x;
+      const mouseY = mouseRef.current.y;
+      const isMouseActive = mouseRef.current.active;
 
       const cols = Math.ceil(width / spacing) + 1;
       const rows = Math.ceil(height / spacing) + 1;
-      const mx = mouseRef.current.x;
-      const my = mouseRef.current.y;
-      const mouseActive = mouseRef.current.active;
 
-      time += 0.04;
+      // Soft vertical vignette: Keep dots clear across sections
+      const pageHeight = Math.max(height, 800);
 
-      for (let r = 0; r < rows; r++) {
-        const y = r * spacing;
+      for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+          const x = i * spacing;
+          const y = j * spacing;
+          const dotData = getDotData(i, j);
 
-        // Vertical mask: Fade out near extreme top (0 - 15%) and bottom (85% - 100%)
-        const normY = y / height;
-        let verticalMask = 1;
-        if (normY < 0.15) {
-          verticalMask = Math.max(0, normY / 0.15);
-        } else if (normY > 0.85) {
-          verticalMask = Math.max(0, (1 - normY) / 0.15);
-        }
-
-        // Apply smooth sine easing for the vertical mask
-        const maskAlpha = Math.sin(verticalMask * Math.PI * 0.5);
-        if (maskAlpha <= 0.01) continue;
-
-        for (let c = 0; c < cols; c++) {
-          const x = c * spacing;
-          const key = `${c}_${r}`;
-
-          let dotData = dotEnergyMap.get(key);
-          if (!dotData) {
-            dotData = { energy: 0, seed: (c * 17 + r * 31) % 100 };
-            dotEnergyMap.set(key, dotData);
+          // Subtle interactive proximity to cursor
+          let dist = 1000;
+          if (isMouseActive) {
+            const dx = mouseX - x;
+            const dy = mouseY - y;
+            dist = Math.sqrt(dx * dx + dy * dy);
           }
 
-          // Check proximity to cursor
-          let targetEnergy = 0;
-          if (mouseActive) {
-            const dist = Math.hypot(x - mx, y - my);
-            if (dist < hoverRadius) {
-              // Smooth quadratic falloff
-              const normDist = dist / hoverRadius;
-              targetEnergy = (1 - normDist) * (1 - normDist);
-            }
-          }
+          // Gentle vertical mask so dots are crisp without obstructing content
+          const normalizedY = y / pageHeight;
+          const maskAlpha = 0.55 + Math.sin(normalizedY * Math.PI) * 0.45;
 
-          // Smoothly ramp up on hover, decay gracefully when cursor leaves
-          if (targetEnergy > dotData.energy) {
-            dotData.energy = dotData.energy + (targetEnergy - dotData.energy) * 0.35;
-          } else {
-            dotData.energy *= 0.92; // Decay trail
-          }
+          if (dist < 140) {
+            // Interactive mouse hover reaction with Cornflower Blue glow
+            const proximityFactor = 1 - dist / 140;
+            const dotSize = 1.0 + proximityFactor * 1.6;
+            const alpha = 0.25 + proximityFactor * 0.65;
 
-          const hasEnergy = dotData.energy > 0.015;
+            ctx.fillStyle = `rgba(100, 149, 237, ${alpha})`;
+            ctx.shadowColor = 'rgba(100, 149, 237, 0.6)';
+            ctx.shadowBlur = 6 * proximityFactor;
 
-          if (hasEnergy) {
-            // Small and thin blue hover animation matching reference
-            const blinkPulse = Math.sin(time * 7 + dotData.seed) * 0.3 + 0.7;
-            const activeAlpha = dotData.energy * maskAlpha * blinkPulse;
-
-            // 1. Thin delicate outer ring on active hover (no big blur blob)
-            if (dotData.energy > 0.15) {
-              const ringRadius = 2.4 + dotData.energy * 1.6;
-              ctx.beginPath();
-              ctx.arc(x, y, ringRadius, 0, Math.PI * 2);
-              ctx.lineWidth = 0.65;
-              ctx.strokeStyle = `rgba(100, 149, 237, ${activeAlpha * 0.75})`;
-              ctx.shadowBlur = 0;
-              ctx.stroke();
-            }
-
-            // 2. Small, crisp core blue dot (thin & precise)
-            const coreRadius = 1.1 + dotData.energy * 0.5; // only 1.1px to 1.6px
             ctx.beginPath();
-            ctx.arc(x, y, coreRadius, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(100, 149, 237, ${Math.min(activeAlpha * 1.2, 1)})`;
-            ctx.shadowBlur = 0;
+            ctx.arc(x, y, dotSize, 0, Math.PI * 2);
             ctx.fill();
           } else {
             // Idle background dot (small, clean, quiet, masked vertically)
@@ -167,23 +137,23 @@ export const BackgroundDots: React.FC<BackgroundDotsProps> = ({ isDark = false }
     render();
 
     return () => {
+      cancelAnimationFrame(animFrameId.current);
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseleave', handleMouseLeave);
-      cancelAnimationFrame(animFrameId.current);
     };
-  }, [isDark]);
+  }, []);
 
   return (
-    <div
-      className="fixed inset-0 pointer-events-none z-0 overflow-hidden"
+    <canvas
+      ref={canvasRef}
+      className="fixed inset-0 pointer-events-none z-0"
       style={{
-        maskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.8) 10%, rgba(0,0,0,1) 50%, rgba(0,0,0,0.8) 90%, transparent 100%)',
-        WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.8) 10%, rgba(0,0,0,1) 50%, rgba(0,0,0,0.8) 90%, transparent 100%)',
+        width: '100%',
+        height: '100%',
+        opacity: 0.85,
       }}
       aria-hidden="true"
-    >
-      <canvas ref={canvasRef} className="w-full h-full block" />
-    </div>
+    />
   );
 };

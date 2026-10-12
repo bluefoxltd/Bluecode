@@ -197,7 +197,7 @@ export const AboutSection: React.FC<{ onOpenBooking?: () => void }> = ({ onOpenB
             }}
             className="px-8 h-12 rounded-full bg-[#6495ED] hover:bg-[#5383db] text-white font-bold text-sm transition-all shadow-lg shadow-[#6495ED]/25 whitespace-nowrap cursor-pointer active:scale-95 flex items-center gap-2"
           >
-            <span>Inquiry Now</span>
+            <span>Book Now</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>

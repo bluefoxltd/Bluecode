@@ -29,7 +29,7 @@ export const FloatingWhatsApp: React.FC<{ onOpenBooking?: () => void; onOpenModa
         <button
           onClick={handleDirectWhatsApp}
           className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white shadow-xl shadow-emerald-500/30 transition-transform duration-300 hover:scale-110 active:scale-95 focus:outline-none cursor-pointer"
-          title="Chat on WhatsApp (+977 9715971505)"
+          title="Chat on WhatsApp (+977-9715971505)"
           aria-label="Chat on WhatsApp"
         >
           <MessageCircle className="w-7 h-7" />

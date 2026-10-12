@@ -21,12 +21,15 @@ const ThemeContext = createContext<ThemeContextType>(defaultContext);
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   useEffect(() => {
     const root = document.documentElement;
+    const body = document.body;
     root.classList.add('dark');
     root.classList.remove('light');
+    body.classList.add('dark');
+    body.classList.remove('light');
     try {
-      localStorage.setItem('bluecode-theme', 'dark');
+      localStorage.removeItem('bluecode-theme');
     } catch {
-      // ignore storage access restrictions
+      // ignore
     }
   }, []);
 

@@ -179,16 +179,16 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenBooking }) => {
                   onClick={handleStartProject}
                   className="bg-[#6495ED] hover:bg-[#5383db] text-white px-8 h-13 text-sm sm:text-base font-bold rounded-full group inline-flex items-center justify-center gap-2 transition-all duration-300 shadow-lg shadow-[#6495ED]/25 cursor-pointer active:scale-95 whitespace-nowrap"
                 >
-                  <span className="whitespace-nowrap">Inquiry Now</span>
+                  <span className="whitespace-nowrap">Book Now</span>
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </button>
 
                 <a
                   href="tel:+9779715971505"
-                  className="h-13 px-8 text-sm sm:text-base font-semibold text-white rounded-full border border-slate-700 hover:border-[#6495ED] hover:bg-slate-800 inline-flex items-center justify-center gap-2 transition-all duration-300"
+                  className="h-13 px-8 text-sm sm:text-base font-semibold text-white rounded-full border border-slate-700 hover:border-[#6495ED] hover:bg-slate-800 inline-flex items-center justify-center gap-2 transition-all duration-300 whitespace-nowrap"
                 >
-                  <Phone className="w-4 h-4 text-[#6495ED]" />
-                  <span>Call +977 9715971505</span>
+                  <Phone className="w-4 h-4 text-[#6495ED] shrink-0" />
+                  <span className="whitespace-nowrap">Call +977-9715971505</span>
                 </a>
               </div>
 

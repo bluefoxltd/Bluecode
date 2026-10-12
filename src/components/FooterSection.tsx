@@ -82,8 +82,8 @@ export const FooterSection: React.FC = () => {
     ],
     Connect: [
       { name: 'Kathmandu, Nepal', href: '#studio', icon: MapPin },
-      { name: '+977 9715971505', href: 'tel:+9779715971505', icon: Phone },
-      { name: 'WhatsApp: +977 9715971505', href: 'https://wa.me/9779715971505', icon: MessageCircle },
+      { name: '+977-9715971505', href: 'tel:+9779715971505', icon: Phone },
+      { name: 'WhatsApp: +977-9715971505', href: 'https://wa.me/9779715971505', icon: MessageCircle },
       { name: 'info@bluecode.agency', href: 'mailto:info@bluecode.agency', icon: Mail },
     ],
   };
@@ -105,10 +105,10 @@ export const FooterSection: React.FC = () => {
             <p className="text-xs sm:text-sm text-slate-300 max-w-sm leading-relaxed">
               Premium brand development, graphic design, print collateral, and full-stack software engineering based in Kathmandu, Nepal.
             </p>
-            <div className="pt-2 flex items-center gap-3 text-xs font-mono text-[#6495ED]">
-              <span>+977 9715971505</span>
+            <div className="pt-2 flex flex-wrap items-center gap-3 text-xs font-mono text-[#6495ED]">
+              <span className="whitespace-nowrap font-semibold">+977-9715971505</span>
               <span>·</span>
-              <span>Kathmandu, Nepal</span>
+              <span className="whitespace-nowrap">Kathmandu, Nepal</span>
             </div>
             <div className="text-xs text-slate-400">
               Official Email: <a href="mailto:info@bluecode.agency" className="text-white hover:text-[#6495ED] transition">info@bluecode.agency</a>
@@ -183,8 +183,8 @@ export const FooterSection: React.FC = () => {
               <span className="text-slate-200 font-medium">Accepting new client projects</span>
             </div>
             <span>·</span>
-            <a href="https://wa.me/9779715971505" className="hover:text-[#6495ED] transition">
-              WhatsApp: +977 9715971505
+            <a href="https://wa.me/9779715971505" className="hover:text-[#6495ED] transition whitespace-nowrap">
+              WhatsApp: <span className="whitespace-nowrap">+977-9715971505</span>
             </a>
           </div>
         </div>

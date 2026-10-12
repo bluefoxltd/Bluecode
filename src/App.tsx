@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { ThemeProvider } from './context/ThemeContext';
 import { BackgroundDots } from './components/BackgroundDots';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
@@ -18,7 +17,7 @@ import { FooterSection } from './components/FooterSection';
 import { BookingModal } from './components/BookingModal';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 
-function AppContent() {
+export default function App() {
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
   const [selectedPlanForBooking, setSelectedPlanForBooking] = useState('01. Brand Identity');
 
@@ -34,9 +33,9 @@ function AppContent() {
   return (
     <div className="min-h-screen bg-[#060913] text-slate-100 flex flex-col font-sans selection:bg-[#6495ED] selection:text-white relative">
       {/* Background Dots with Cornflower Blue accents */}
-      <BackgroundDots isDark={true} />
+      <BackgroundDots />
 
-      {/* Navigation (Permanent Dark Mode with #6495ED styling) */}
+      {/* Navigation */}
       <Navbar onOpenBooking={() => handleOpenBooking()} />
 
       {/* Main Content Sections */}
@@ -91,13 +90,5 @@ function AppContent() {
       {/* Floating 24/7 WhatsApp Chat Support Widget */}
       <FloatingWhatsApp onOpenBooking={() => handleOpenBooking()} />
     </div>
-  );
-}
-
-export default function App() {
-  return (
-    <ThemeProvider>
-      <AppContent />
-    </ThemeProvider>
   );
 }

@@ -3,6 +3,8 @@ import { X, Send, MapPin, Phone, FileDown, CheckCircle2, MessageSquare, ArrowRig
 import { ALL_SERVICES, INVESTMENT_PACKAGES } from '../data/services';
 import { generateReceiptPdf, InquiryFormData } from '../utils/generateReceiptPdf';
 import { BlueCodeLogo } from './BlueCodeLogo';
+import { NepaliDatePicker } from './NepaliDatePicker';
+import { getDefaultNepaliDate } from '../utils/nepaliCalendar';
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -18,6 +20,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [address, setAddress] = useState('');
+  const [startDateBS, setStartDateBS] = useState(getDefaultNepaliDate().formatted);
   const [service, setService] = useState(
     selectedService || ALL_SERVICES[0].title
   );
@@ -76,7 +79,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
       ? phoneNumber
       : `+977 ${phoneNumber.replace(/^\+?977\s*/, '')}`;
 
-    const refId = `BC-INQ-${Math.floor(100000 + Math.random() * 900000)}`;
+    const refId = `BC-BK-${Math.floor(100000 + Math.random() * 900000)}`;
     const now = new Date().toLocaleString('en-US', {
       day: 'numeric',
       month: 'short',
@@ -91,6 +94,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
       phone: fullPhone,
       address,
       service,
+      startDateBS,
       notes,
       referenceId: refId,
       createdAt: now,
@@ -99,14 +103,15 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     // 1. Instant auto-download of PDF receipt letterhead
     const fileName = generateReceiptPdf(formData);
 
-    // 2. Format WhatsApp inquiry message
+    // 2. Format WhatsApp booking message
     const formattedMessage =
-      `*🌟 NEW CLIENT INQUIRY — BLUE CODE*\n` +
+      `*🌟 NEW CLIENT BOOKING — BLUE CODE*\n` +
       `───────────────────────────\n` +
-      `*Receipt Ref:* ${refId}\n` +
+      `*Booking Ref:* ${refId}\n` +
       `*Client Name:* ${name}\n` +
       `*Phone/WhatsApp:* ${fullPhone}\n` +
       `*Location/Address:* ${address || 'Kathmandu, Nepal'}\n` +
+      `*Starting Date (BS):* ${startDateBS}\n` +
       `*Selected Service / Package:* ${service}\n` +
       `*Additional Notes:* ${notes || 'Standard project consultation requested'}\n` +
       `───────────────────────────\n` +
@@ -150,10 +155,10 @@ export const BookingModal: React.FC<BookingModalProps> = ({
             <BlueCodeLogo size={32} />
             <div>
               <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-[#6495ED]">
-                Client Inquiry Desk · Kathmandu, Nepal
+                Client Booking Desk · Kathmandu, Nepal
               </span>
               <h3 className="text-lg font-bold tracking-tight text-white">
-                Project Inquiry &amp; Receipt
+                Book Now &amp; Receipt
               </h3>
             </div>
           </div>
@@ -173,7 +178,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                 <CheckCircle2 className="w-7 h-7" />
               </div>
               <div>
-                <h4 className="text-xl font-bold text-white">Inquiry Sent &amp; Receipt Downloaded!</h4>
+                <h4 className="text-xl font-bold text-white">Booking Confirmed &amp; Receipt Downloaded!</h4>
                 <p className="text-xs text-slate-300 mt-1">
                   Reference: <span className="text-[#6495ED] font-mono font-bold">{lastSubmitted.data.referenceId}</span>
                 </p>
@@ -182,6 +187,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
               <div className="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 text-left text-xs font-mono text-slate-300 space-y-1">
                 <div><span className="text-slate-500">CLIENT:</span> {lastSubmitted.data.name}</div>
                 <div><span className="text-slate-500">PHONE:</span> {lastSubmitted.data.phone}</div>
+                <div><span className="text-slate-500">START DATE (BS):</span> {lastSubmitted.data.startDateBS}</div>
                 <div><span className="text-slate-500">TARGET:</span> {lastSubmitted.data.service}</div>
               </div>
 
@@ -270,6 +276,14 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                   />
                 </div>
               </div>
+
+              {/* Inbuilt Nepali Dropdown Calendar Starting Date */}
+              <NepaliDatePicker
+                value={startDateBS}
+                onChange={setStartDateBS}
+                label="Project Starting Date (Nepali Calendar BS)"
+                required
+              />
 
               {/* Complete Services & Investment Packages Dropdown List */}
               <div>
@@ -395,7 +409,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                 />
               </div>
 
-              {/* Submit Button: strictly 'Inquiry Now' with whitespace-nowrap */}
+              {/* Submit Button: strictly 'Book Now' with whitespace-nowrap */}
               <div className="pt-2">
                 <button
                   type="submit"
@@ -403,7 +417,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                   className="w-full flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl bg-[#6495ED] hover:bg-[#5383db] text-white font-bold text-sm transition-all shadow-lg shadow-[#6495ED]/25 active:scale-[0.99] cursor-pointer whitespace-nowrap"
                 >
                   <Send className="w-4 h-4" />
-                  <span className="whitespace-nowrap">Inquiry Now</span>
+                  <span className="whitespace-nowrap">Book Now</span>
                   <ArrowRight className="w-4 h-4 ml-1" />
                 </button>
                 <p className="text-center text-[11px] text-slate-400 mt-2">

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowRight, Send } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import holographicGlobeImg from '../assets/images/holographic-globe.png';
 
 interface HeroSectionProps {
   onOpenBooking: (service?: string) => void;
@@ -18,71 +19,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
   // Strictly kept on the SAME line after "Building Brands that"
   const changeableWords = ['Inspire', 'Stand Out', 'Resonate', 'Convert'];
   const [wordIndex, setWordIndex] = useState(0);
-
-  const [processedGlobeUrl, setProcessedGlobeUrl] = useState<string | null>(null);
-
-  // Client-side transparency processor: ensures 100% transparent background with clean edges
-  useEffect(() => {
-    const img = new Image();
-    img.src = '/src/assets/images/holographic_globe_transparent_1791780819665.jpg';
-    img.onload = () => {
-      try {
-        const off = document.createElement('canvas');
-        off.width = img.width;
-        off.height = img.height;
-        const ctx = off.getContext('2d');
-        if (!ctx) return;
-        ctx.drawImage(img, 0, 0);
-
-        const imgData = ctx.getImageData(0, 0, off.width, off.height);
-        const data = imgData.data;
-        const w = off.width;
-        const h = off.height;
-        const cx = w / 2;
-        const cy = h / 2;
-        const maxRadius = Math.min(w, h) * 0.49;
-
-        for (let y = 0; y < h; y++) {
-          for (let x = 0; x < w; x++) {
-            const idx = (y * w + x) * 4;
-            const r = data[idx];
-            const g = data[idx + 1];
-            const b = data[idx + 2];
-
-            const dx = x - cx;
-            const dy = y - cy;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-
-            // Outside the globe bounds -> completely transparent
-            if (dist > maxRadius) {
-              data[idx + 3] = 0;
-              continue;
-            }
-
-            // Smooth anti-aliased edge falloff
-            const edgeDist = maxRadius - dist;
-            if (edgeDist < 8) {
-              const edgeAlpha = Math.max(0, edgeDist / 8);
-              data[idx + 3] = Math.floor(data[idx + 3] * edgeAlpha);
-            }
-
-            // Remove any dark background artifact pixels
-            const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
-            if (luminance < 24) {
-              data[idx + 3] = 0;
-            } else if (luminance < 48) {
-              data[idx + 3] = Math.floor(data[idx + 3] * ((luminance - 24) / 24));
-            }
-          }
-        }
-
-        ctx.putImageData(imgData, 0, 0);
-        setProcessedGlobeUrl(off.toDataURL('image/png'));
-      } catch (err) {
-        console.warn('Canvas transparency processor fallback:', err);
-      }
-    };
-  }, []);
 
   // Cycle changeable words smoothly every 2.4s
   useEffect(() => {
@@ -212,6 +148,32 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
       ctx.arc(cx, cy, sphereRadius * 1.08, 0, Math.PI * 2);
       ctx.fillStyle = atmoGrad;
       ctx.fill();
+
+      // 3.5. 3D Holographic Digital Globe Core Grid (Latitude circles & rotating Longitude meridians)
+      ctx.save();
+      ctx.translate(cx, cy);
+      const latAngles = [-0.65, -0.42, -0.21, 0, 0.21, 0.42, 0.65];
+      latAngles.forEach((lat) => {
+        const latRadius = sphereRadius * Math.cos(lat) * 0.98;
+        const latY = sphereRadius * Math.sin(lat) * 0.98;
+        ctx.beginPath();
+        ctx.ellipse(0, latY, latRadius, latRadius * 0.28, 0, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(100, 149, 237, 0.14)';
+        ctx.lineWidth = 0.75;
+        ctx.stroke();
+      });
+
+      const meridianCount = 6;
+      for (let m = 0; m < meridianCount; m++) {
+        const meridianRot = (time * 0.003 + (m / meridianCount) * Math.PI) % Math.PI;
+        const meridianWidth = sphereRadius * 0.98 * Math.cos(meridianRot);
+        ctx.beginPath();
+        ctx.ellipse(0, 0, Math.abs(meridianWidth), sphereRadius * 0.98, 0, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(0, 216, 255, 0.12)';
+        ctx.lineWidth = 0.75;
+        ctx.stroke();
+      }
+      ctx.restore();
 
       // 4. Multiple Thin Orbital Satellite Rings & Data Arcs on Intersecting Axes
       orbitRings.forEach((ring) => {
@@ -411,19 +373,19 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
             {/* Two CTA Buttons with Cornflower Blue Styling */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2">
               <button
-                onClick={handleStartProject}
+                onClick={() => onOpenBooking()}
                 className="group inline-flex items-center justify-center gap-2.5 px-8 h-13 rounded-full bg-[#6495ED] hover:bg-[#5383db] text-white text-base font-bold shadow-lg shadow-[#6495ED]/25 transition-all duration-300 cursor-pointer active:scale-95 whitespace-nowrap"
               >
-                <span>Inquiry Now</span>
+                <span>Book Now</span>
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </button>
 
               <button
-                onClick={() => onOpenBooking()}
+                onClick={handleStartProject}
                 className="inline-flex items-center justify-center gap-2 px-8 h-13 rounded-full border border-slate-700 bg-slate-900/80 hover:bg-slate-800 text-white text-base font-semibold transition-all duration-300 cursor-pointer active:scale-95 whitespace-nowrap"
               >
                 <Send className="w-4 h-4 text-[#6495ED]" />
-                <span>Inquiry Now</span>
+                <span>Inquiry Desk</span>
               </button>
             </div>
           </div>
@@ -449,9 +411,20 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
                 className="relative z-10 w-full h-full flex items-center justify-center select-none"
               >
                 <img
-                  src="/holographic-globe.png"
-                  alt="High-Tech Digital 3D Holographic Globe"
-                  referrerPolicy="no-referrer"
+                  src={holographicGlobeImg}
+                  alt=""
+                  aria-label="High-Tech Digital 3D Holographic Globe"
+                  loading="eager"
+                  decoding="async"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    const origin = window.location.origin;
+                    if (target.src !== origin + '/holographic-globe.png' && target.src !== '/holographic-globe.png') {
+                      target.src = '/holographic-globe.png';
+                    } else if (target.src !== origin + '/assets/holographic-globe.png' && target.src !== '/assets/holographic-globe.png') {
+                      target.src = '/assets/holographic-globe.png';
+                    }
+                  }}
                   className="w-[96%] h-[96%] object-contain pointer-events-none drop-shadow-[0_0_50px_rgba(100,149,237,0.7)] transition-opacity duration-300 opacity-100"
                 />
               </motion.div>

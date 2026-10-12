@@ -25,7 +25,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onOpenBooking })
         'Direct WhatsApp Support Line',
         'Standard 7-Day Sprint Delivery',
       ],
-      ctaText: 'Inquiry Now',
+      ctaText: 'Book Now',
       isCustom: false,
     },
     {
@@ -45,7 +45,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onOpenBooking })
         'Monthly Conversion & Analytics Audit',
         'Priority Slack / WhatsApp Agency Channel',
       ],
-      ctaText: 'Inquiry Now',
+      ctaText: 'Book Now',
       isCustom: false,
     },
     {
@@ -65,7 +65,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onOpenBooking })
         'Continuous ROAS Ad Spend Funnel Management',
         '24/7 Dedicated Support & NDA Compliance',
       ],
-      ctaText: 'Inquiry Now',
+      ctaText: 'Book Now',
       isCustom: true,
     },
   ];
@@ -247,16 +247,16 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onOpenBooking })
           <p>
             All packages include instant letterhead receipt generation &amp; free 30-minute discovery call.
           </p>
-          <div className="flex items-center justify-center gap-2">
+          <div className="flex flex-wrap items-center justify-center gap-2">
             <span>Need enterprise terms or bespoke scope?</span>
             <a
               href="https://wa.me/9779715971505"
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1 font-semibold text-[#6495ED] hover:underline underline-offset-4"
+              className="inline-flex items-center gap-1 font-semibold text-[#6495ED] hover:underline underline-offset-4 whitespace-nowrap"
             >
-              <MessageCircle className="w-3.5 h-3.5" />
-              <span>Contact WhatsApp +977 9715971505</span>
+              <MessageCircle className="w-3.5 h-3.5 shrink-0" />
+              <span>Contact WhatsApp <span className="whitespace-nowrap">+977-9715971505</span></span>
             </a>
           </div>
         </div>

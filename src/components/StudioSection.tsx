@@ -47,9 +47,9 @@ export const StudioSection: React.FC = () => {
               </div>
               <div className="text-slate-700">·</div>
               <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-[#6495ED]" />
-                <a href="tel:+9779715971505" className="hover:text-[#6495ED] transition">
-                  +977 9715971505
+                <Phone className="w-4 h-4 text-[#6495ED] shrink-0" />
+                <a href="tel:+9779715971505" className="hover:text-[#6495ED] transition whitespace-nowrap">
+                  +977-9715971505
                 </a>
               </div>
             </div>

@@ -211,7 +211,7 @@ export const HowItWorksSection: React.FC<{ onOpenBooking?: () => void }> = ({ on
               }}
               className="px-6 py-2 rounded-full bg-[#6495ED] hover:bg-[#5383db] text-white font-bold text-xs sm:text-sm transition-all shadow-md shadow-[#6495ED]/25 whitespace-nowrap cursor-pointer active:scale-95"
             >
-              <span>Inquiry Now</span>
+              <span>Book Now</span>
             </button>
           </div>
         </div>
