@@ -147,3 +147,55 @@ export const ALL_SERVICES: ServiceDefinition[] = [
     badge: 'MOBILE',
   },
 ];
+
+export interface InvestmentPackage {
+  id: string;
+  name: string;
+  badge: string;
+  monthlyPrice: string;
+  annualPrice: string;
+  monthlyBillingNote: string;
+  annualBillingNote: string;
+  pricing: string;
+  summary: string;
+  deliverables: string[];
+}
+
+export const INVESTMENT_PACKAGES: InvestmentPackage[] = [
+  {
+    id: 'pkg-essentials',
+    name: 'Essentials Plan (Starter Kit)',
+    badge: 'STARTER KIT',
+    monthlyPrice: 'NPR 2,500 / mo',
+    annualPrice: 'NPR 2,000 / mo',
+    monthlyBillingNote: 'Billed monthly (NPR 2,500/mo)',
+    annualBillingNote: 'NPR 24,000 / year (Save 20% · NPR 2,000/mo)',
+    pricing: 'Monthly: NPR 2,500/mo | Annual: NPR 2,000/mo (Save 20%)',
+    summary: 'Complete Primary & Secondary Logo Package, Core Color & Typography Kit, Business Card & Display Assets, 1-Page Landing Page, WhatsApp Support Line.',
+    deliverables: ['Primary & Secondary Logo Package', 'Color & Typography Kit', 'Business Card Assets', '1-Page Landing Page', '7-Day Sprint Delivery'],
+  },
+  {
+    id: 'pkg-growth',
+    name: 'Growth Plan (Most Popular)',
+    badge: 'MOST POPULAR',
+    monthlyPrice: 'NPR 3,500 / mo',
+    annualPrice: 'NPR 2,800 / mo',
+    monthlyBillingNote: 'Billed monthly (NPR 3,500/mo)',
+    annualBillingNote: 'NPR 33,600 / year (Save 20% · NPR 2,800/mo)',
+    pricing: 'Monthly: NPR 3,500/mo | Annual: NPR 2,800/mo (Save 20%)',
+    summary: 'Master Visual Identity System, 30+ Page Guidelines, Monthly Social Media Suite (16 Posts), Full 5-Page Next.js Website, Google & Meta Ads Strategy.',
+    deliverables: ['Master Visual Identity System', '30+ Page Guidelines', 'Monthly 16 Social Posts', '5-Page Next.js Website', 'Ads Strategy & ROAS Audit'],
+  },
+  {
+    id: 'pkg-enterprise',
+    name: 'Enterprise Custom (Bespoke Scope)',
+    badge: 'BESPOKE SCOPE',
+    monthlyPrice: 'Custom Retainer / mo',
+    annualPrice: 'Custom Milestone / yr',
+    monthlyBillingNote: 'Tailored monthly retainer & SLA agreement',
+    annualBillingNote: 'Annual milestone or retainer billing schedule',
+    pricing: 'Monthly: Custom Retainer | Annual: Custom Milestone',
+    summary: 'Enterprise Brand Architecture, Print Collateral & Factory Tech Packs, Custom Web & Mobile App Engineering, Dedicated Lead Director & 24/7 SLA.',
+    deliverables: ['Enterprise Brand Architecture', 'Custom Web & Mobile Apps', 'Dedicated Creative Director', '3D CGI & Video Production', 'Dedicated 24/7 Support'],
+  },
+];

@@ -89,3 +89,63 @@
 .animate-progress-fill {
   animation: progress-fill 5s linear forwards;
 }
+
+/* Glassmorphism base + Animated Shiny Glass Hover Effect */
+.glass-card {
+  position: relative;
+  background: rgba(12, 18, 34, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover {
+  border-color: rgba(100, 149, 237, 0.45);
+  box-shadow: 0 12px 40px -10px rgba(100, 149, 237, 0.28);
+  transform: translateY(-2px);
+}
+
+/* Shiny light beam sweep across card on hover */
+.glass-shiny-hover {
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-shiny-hover::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -75%;
+  width: 50%;
+  height: 200%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 25%,
+    rgba(100, 149, 237, 0.22) 50%,
+    rgba(255, 255, 255, 0.08) 75%,
+    transparent 100%
+  );
+  transform: rotate(30deg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 25;
+}
+
+.glass-shiny-hover:hover::before {
+  opacity: 1;
+  animation: glassSheenSweep 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes glassSheenSweep {
+  0% {
+    left: -75%;
+  }
+  100% {
+    left: 145%;
+  }
+}

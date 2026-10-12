@@ -19,20 +19,20 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
   }, []);
 
   const navLinks = [
+    { name: 'About Us', href: '#about' },
+    { name: 'How we Work', href: '#how-we-work' },
     { name: 'Services', href: '#services' },
-    { name: 'Inquire & Receipt', href: '#inquiry' },
-    { name: 'Tools Ecosystem', href: '#tools' },
     { name: 'Studio', href: '#studio' },
-    { name: 'Work', href: '#work' },
-    { name: 'Packages', href: '#pricing' },
+    { name: 'Work Package', href: '#pricing' },
+    { name: 'Inquiry now', href: '#inquiry' },
   ];
 
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-[#060913]/92 backdrop-blur-md border-b border-slate-800/80 shadow-md'
-          : 'bg-transparent border-b border-white/5'
+          ? 'bg-[#060913]/90 backdrop-blur-xl border-b border-white/10 shadow-lg shadow-black/40'
+          : 'bg-[#060913]/40 backdrop-blur-md border-b border-white/5'
       }`}
     >
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
@@ -43,7 +43,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
           </a>
 
           {/* Zone 2: Navigation Links with Cornflower Blue hover */}
-          <nav className="hidden md:flex items-center gap-7 lg:gap-9 text-sm font-medium text-slate-300">
+          <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-sm font-medium text-slate-300">
             {navLinks.map((link) => (
               <a
                 key={link.name}
@@ -57,18 +57,18 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
           </nav>
 
           {/* Zone 3: Actions with Cornflower Blue (#6495ED) */}
-          <div className="hidden md:flex items-center gap-3 shrink-0">
+          <div className="hidden sm:flex items-center gap-3 shrink-0">
             <button
               onClick={onOpenBooking}
-              className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white bg-[#6495ED] hover:bg-[#5383db] rounded-full transition-all duration-200 whitespace-nowrap shrink-0 shadow-md shadow-[#6495ED]/20 active:scale-95 cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 text-xs sm:text-sm font-bold uppercase tracking-wider text-white bg-[#6495ED] hover:bg-[#5383db] rounded-full transition-all duration-200 whitespace-nowrap shrink-0 shadow-md shadow-[#6495ED]/25 active:scale-95 cursor-pointer"
             >
-              <FileDown className="w-3.5 h-3.5" />
-              <span>Inquire &amp; Receipt</span>
+              <FileDown className="w-4 h-4" />
+              <span className="whitespace-nowrap">Inquiry Now</span>
             </button>
           </div>
 
           {/* Mobile Right Controls: Menu Button */}
-          <div className="md:hidden flex items-center gap-2">
+          <div className="lg:hidden flex items-center gap-2">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 text-slate-200 hover:text-[#6495ED] focus:outline-none"
@@ -82,8 +82,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
 
       {/* Mobile menu dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-[#060913]/98 backdrop-blur-xl border-b border-slate-800 px-6 py-6 shadow-2xl animate-fade-in">
-          <nav className="flex flex-col gap-4 mb-6">
+        <div className="lg:hidden bg-[#060913]/98 backdrop-blur-xl border-b border-slate-800 px-6 py-6 shadow-2xl animate-fade-in">
+          <nav className="flex flex-col gap-3 mb-6">
             {navLinks.map((link) => (
               <a
                 key={link.name}
@@ -101,10 +101,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
                 setMobileMenuOpen(false);
                 onOpenBooking();
               }}
-              className="w-full flex items-center justify-center gap-2 py-3.5 text-sm font-bold rounded-full bg-[#6495ED] text-white hover:bg-[#5383db] transition shadow-lg shadow-[#6495ED]/20"
+              className="w-full flex items-center justify-center gap-2 py-3.5 text-sm font-bold rounded-full bg-[#6495ED] text-white hover:bg-[#5383db] transition shadow-lg shadow-[#6495ED]/20 whitespace-nowrap"
             >
               <FileDown className="w-4 h-4" />
-              <span>Client Inquiry &amp; Letterhead Receipt</span>
+              <span>Inquiry Now</span>
             </button>
             <a
               href="https://wa.me/9779715971505"

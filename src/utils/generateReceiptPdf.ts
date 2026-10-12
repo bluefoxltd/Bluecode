@@ -1,4 +1,5 @@
 import { jsPDF } from 'jspdf';
+import { BLUECODE_LOGO_BASE64 } from './logoBase64';
 
 export interface InquiryFormData {
   name: string;
@@ -51,28 +52,26 @@ export function generateReceiptPdf(data: InquiryFormData): string {
   doc.line(0, 43, pageWidth, 43);
 
   // Logo & Branding on Header
-  // Logo Emblem
-  doc.setFillColor(primaryR, primaryG, primaryB);
-  doc.roundedRect(margin, 12, 16, 16, 2.5, 2.5, 'F');
-  doc.setTextColor(255, 255, 255);
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(11);
-  doc.text('BC', margin + 4.5, 23);
+  try {
+    // Official Blue Code Logo PNG
+    const logoW = 54;
+    const logoH = 15.6;
+    doc.addImage(BLUECODE_LOGO_BASE64, 'PNG', margin, 11, logoW, logoH, undefined, 'FAST');
 
-  // Brand Name
-  doc.setFontSize(18);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(255, 255, 255);
-  doc.text('BLUE CODE', margin + 21, 20);
+    doc.setFontSize(7.5);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(primaryR, primaryG, primaryB);
+    doc.text('DIGITAL BRANDING & SOFTWARE AGENCY', margin, 31);
 
-  doc.setFontSize(8.5);
-  doc.setFont('helvetica', 'normal');
-  doc.setTextColor(primaryR, primaryG, primaryB);
-  doc.text('DIGITAL BRANDING & SOFTWARE AGENCY', margin + 21, 25);
-
-  doc.setFontSize(7.5);
-  doc.setTextColor(180, 190, 210);
-  doc.text('Kathmandu, Nepal  ·  Global Standards', margin + 21, 30);
+    doc.setFontSize(7);
+    doc.setTextColor(180, 190, 210);
+    doc.text('Kathmandu, Nepal  ·  Global Standards', margin, 36);
+  } catch (_e) {
+    doc.setFontSize(18);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(255, 255, 255);
+    doc.text('BLUE CODE', margin, 22);
+  }
 
   // Header Right Side: Receipt Badge
   doc.setFillColor(primaryR, primaryG, primaryB);
@@ -171,8 +170,9 @@ export function generateReceiptPdf(data: InquiryFormData): string {
   doc.text('Target Service:', col2X, currentY + 9);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(primaryR, primaryG, primaryB);
-  doc.setFontSize(9.5);
-  doc.text(data.service || 'Comprehensive Creative & Tech Suite', col2X + 26, currentY + 9);
+  doc.setFontSize(8.5);
+  const serviceLines = doc.splitTextToSize(data.service || 'Comprehensive Creative & Tech Suite', 64);
+  doc.text(serviceLines.slice(0, 2), col2X + 26, currentY + 8);
 
   doc.setFontSize(8.5);
   doc.setFont('helvetica', 'bold');

@@ -4,6 +4,7 @@ import { BackgroundDots } from './components/BackgroundDots';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
 import { FeaturesSection } from './components/FeaturesSection';
+import { AboutSection } from './components/AboutSection';
 import { HowItWorksSection } from './components/HowItWorksSection';
 import { StudioSection } from './components/StudioSection';
 import { MetricsSection } from './components/MetricsSection';
@@ -43,11 +44,14 @@ function AppContent() {
         {/* Hero Section with 2x Enlarged Headline, 2x Holographic Globe, Tight Fit without gaps */}
         <HeroSection onOpenBooking={handleOpenBooking} />
 
+        {/* About Us: Vision, Mission, Goals, Kathmandu Roots & Agency Principles */}
+        <AboutSection onOpenBooking={() => handleOpenBooking()} />
+
+        {/* How We Work: 6 Sequential Steps (Requirement Gathering to Support & Maintenance) */}
+        <HowItWorksSection onOpenBooking={() => handleOpenBooking()} />
+
         {/* 01–12 Complete Services / Capabilities List */}
         <FeaturesSection onOpenBooking={handleOpenBooking} />
-
-        {/* 3-Step Process (Discover, Design, Launch) with Live Markdown Code Simulator */}
-        <HowItWorksSection />
 
         {/* Our Studio: Rooted in Kathmandu, Nepal & Industries We Serve */}
         <StudioSection />
@@ -64,11 +68,11 @@ function AppContent() {
         {/* Our Work: Case Study Deliverables Interactive Code Terminal */}
         <DeliverablesSection />
 
-        {/* Dedicated Client Inquiry Form & Instant PDF Letterhead Receipt Generator */}
-        <InquirySection />
-
-        {/* Packages & Pricing: Essentials NPR 2,500, Growth NPR 3,500, Enterprise Custom */}
+        {/* Packages & Pricing (Investment Packages): Essentials NPR 2,500, Growth NPR 3,500, Enterprise Custom */}
         <PricingSection onOpenBooking={handleOpenBooking} />
+
+        {/* Direct Client Inquiry Desk: Dedicated Client Inquiry Form & Instant PDF Letterhead Receipt Generator (Placed below Investment Packages) */}
+        <InquirySection initialService={selectedPlanForBooking} />
 
         {/* 3D ASCII Tetrahedron Interactive CTA Section */}
         <CtaSection onOpenBooking={() => handleOpenBooking('01. Brand Identity')} />
@@ -81,7 +85,7 @@ function AppContent() {
       <BookingModal
         isOpen={bookingModalOpen}
         onClose={() => setBookingModalOpen(false)}
-        selectedPlan={selectedPlanForBooking}
+        selectedService={selectedPlanForBooking}
       />
 
       {/* Floating 24/7 WhatsApp Chat Support Widget */}

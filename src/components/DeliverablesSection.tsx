@@ -69,7 +69,7 @@ export const DeliverablesSection: React.FC = () => {
           <div className="lg:col-span-5 space-y-8">
             <div className="grid sm:grid-cols-2 lg:grid-cols-1 gap-5">
               {guarantees.map((item) => (
-                <div key={item.title} className="p-6 rounded-2xl bg-[#0A0F1F] border border-slate-800 shadow-sm">
+                <div key={item.title} className="p-6 rounded-2xl glass-card glass-shiny-hover border border-white/10 shadow-sm">
                   <h4 className="text-base font-bold text-white mb-1.5">
                     {item.title}
                   </h4>

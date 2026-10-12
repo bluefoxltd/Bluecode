@@ -412,18 +412,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2">
               <button
                 onClick={handleStartProject}
-                className="group inline-flex items-center justify-center gap-2.5 px-8 h-13 rounded-full bg-[#6495ED] hover:bg-[#5383db] text-white text-base font-bold shadow-lg shadow-[#6495ED]/25 transition-all duration-300 cursor-pointer active:scale-95"
+                className="group inline-flex items-center justify-center gap-2.5 px-8 h-13 rounded-full bg-[#6495ED] hover:bg-[#5383db] text-white text-base font-bold shadow-lg shadow-[#6495ED]/25 transition-all duration-300 cursor-pointer active:scale-95 whitespace-nowrap"
               >
-                <span>Start a Project</span>
+                <span>Inquiry Now</span>
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </button>
 
               <button
                 onClick={() => onOpenBooking()}
-                className="inline-flex items-center justify-center gap-2 px-8 h-13 rounded-full border border-slate-700 bg-slate-900/80 hover:bg-slate-800 text-white text-base font-semibold transition-all duration-300 cursor-pointer active:scale-95"
+                className="inline-flex items-center justify-center gap-2 px-8 h-13 rounded-full border border-slate-700 bg-slate-900/80 hover:bg-slate-800 text-white text-base font-semibold transition-all duration-300 cursor-pointer active:scale-95 whitespace-nowrap"
               >
                 <Send className="w-4 h-4 text-[#6495ED]" />
-                <span>Instant Inquiry Receipt</span>
+                <span>Inquiry Now</span>
               </button>
             </div>
           </div>
@@ -436,7 +436,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
               transition={{ duration: 1, ease: 'easeOut' }}
               className="relative w-[360px] h-[360px] sm:w-[500px] sm:h-[500px] md:w-[600px] md:h-[600px] lg:w-[720px] lg:h-[720px] xl:w-[860px] xl:h-[860px] max-w-none flex items-center justify-center group"
             >
-              {/* High-Tech 3D Holographic Globe: 2x size, isolated, completely transparent background, no circle background */}
+              {/* High-Tech 3D Holographic Globe: 2x size, 100% clean transparent background, zero black dots or artifacts */}
               <motion.div
                 animate={{
                   rotate: [0, 360],
@@ -449,12 +449,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
                 className="relative z-10 w-full h-full flex items-center justify-center select-none"
               >
                 <img
-                  src={processedGlobeUrl || '/src/assets/images/holographic_globe_transparent_1791780819665.jpg'}
+                  src="/holographic-globe.png"
                   alt="High-Tech Digital 3D Holographic Globe"
                   referrerPolicy="no-referrer"
-                  className={`w-[96%] h-[96%] object-contain pointer-events-none drop-shadow-[0_0_46px_rgba(100,149,237,0.65)] transition-opacity duration-300 ${
-                    processedGlobeUrl ? 'opacity-100' : 'mix-blend-screen opacity-90'
-                  }`}
+                  className="w-[96%] h-[96%] object-contain pointer-events-none drop-shadow-[0_0_50px_rgba(100,149,237,0.7)] transition-opacity duration-300 opacity-100"
                 />
               </motion.div>
 

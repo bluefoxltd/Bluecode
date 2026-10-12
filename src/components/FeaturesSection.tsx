@@ -29,8 +29,8 @@ export const FeaturesSection: React.FC<{ onOpenBooking: (serviceName?: string) =
           </p>
         </div>
 
-        {/* Services Accordion / List with all 12 services */}
-        <div className="divide-y divide-slate-800 border-y border-slate-800">
+        {/* Services List with all 12 services in Glassmorphic Shiny Cards */}
+        <div className="grid grid-cols-1 gap-4">
           {ALL_SERVICES.map((service, index) => {
             const Icon = service.icon;
             const isSelected = activeService === index;
@@ -38,17 +38,17 @@ export const FeaturesSection: React.FC<{ onOpenBooking: (serviceName?: string) =
             return (
               <div
                 key={service.number}
-                className={`transition-colors duration-200 ${
-                  isSelected ? 'bg-slate-900/60' : 'hover:bg-slate-900/30'
+                onClick={() => setActiveService(index)}
+                className={`glass-card glass-shiny-hover rounded-2xl p-6 sm:p-7 border border-white/10 transition-all duration-300 cursor-pointer ${
+                  isSelected
+                    ? 'border-[#6495ED]/60 bg-[#0E172E]/90 shadow-xl shadow-[#6495ED]/15'
+                    : 'hover:border-[#6495ED]/40 bg-[#0A1020]/70'
                 }`}
               >
-                <div
-                  onClick={() => setActiveService(index)}
-                  className="py-6 lg:py-8 cursor-pointer flex flex-col lg:flex-row lg:items-start justify-between gap-6 px-4 sm:px-6"
-                >
+                <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
                   {/* Left: Number, Badge, Title and Tagline */}
                   <div className="flex items-start gap-5 lg:w-5/12">
-                    <span className="font-mono text-xl lg:text-2xl font-bold text-slate-600 shrink-0">
+                    <span className="font-mono text-xl lg:text-2xl font-bold text-[#6495ED]/70 shrink-0">
                       {service.number}
                     </span>
                     <div>
@@ -88,10 +88,10 @@ export const FeaturesSection: React.FC<{ onOpenBooking: (serviceName?: string) =
                         e.stopPropagation();
                         onOpenBooking(`${service.number}. ${service.title}`);
                       }}
-                      className="shrink-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider text-white bg-[#6495ED] hover:bg-[#5383db] transition-all whitespace-nowrap shadow-md shadow-[#6495ED]/20 active:scale-95 cursor-pointer"
+                      className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider text-white bg-[#6495ED] hover:bg-[#5383db] transition-all whitespace-nowrap shadow-md shadow-[#6495ED]/20 active:scale-95 cursor-pointer"
                     >
-                      <span>Inquire</span>
-                      <ArrowRight className="w-3 h-3" />
+                      <span className="whitespace-nowrap">Inquiry Now</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>

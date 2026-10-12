@@ -155,7 +155,7 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenBooking }) => {
   return (
     <section id="cta" className="relative py-20 lg:py-28 bg-[#060913] transition-colors border-t border-slate-800">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12 relative z-10">
-        <div className="relative border border-slate-800 bg-[#0C1222] p-8 sm:p-12 lg:p-20 rounded-3xl overflow-hidden shadow-2xl">
+        <div className="relative glass-card glass-shiny-hover p-8 sm:p-12 lg:p-20 rounded-3xl shadow-2xl">
           {/* Top-Right and Bottom-Left architectural corner lines with #6495ED */}
           <div className="absolute top-0 right-0 w-32 h-32 border-b border-l border-[#6495ED]/20 pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-32 h-32 border-t border-r border-[#6495ED]/20 pointer-events-none" />
@@ -177,9 +177,9 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenBooking }) => {
                 <button
                   type="button"
                   onClick={handleStartProject}
-                  className="bg-[#6495ED] hover:bg-[#5383db] text-white px-8 h-13 text-sm sm:text-base font-bold rounded-full group inline-flex items-center justify-center gap-2 transition-all duration-300 shadow-lg shadow-[#6495ED]/25 cursor-pointer active:scale-95"
+                  className="bg-[#6495ED] hover:bg-[#5383db] text-white px-8 h-13 text-sm sm:text-base font-bold rounded-full group inline-flex items-center justify-center gap-2 transition-all duration-300 shadow-lg shadow-[#6495ED]/25 cursor-pointer active:scale-95 whitespace-nowrap"
                 >
-                  <span>Start Inquiry &amp; Get Receipt</span>
+                  <span className="whitespace-nowrap">Inquiry Now</span>
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </button>
 

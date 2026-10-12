@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
-import { Send, FileDown, CheckCircle2, Sparkles, MapPin, Phone, MessageSquare, ArrowRight } from 'lucide-react';
-import { ALL_SERVICES } from '../data/services';
+import React, { useState, useEffect } from 'react';
+import { Send, FileDown, CheckCircle2, Sparkles, MapPin, Phone, MessageSquare, ArrowRight, ShieldCheck, Layers } from 'lucide-react';
+import { ALL_SERVICES, INVESTMENT_PACKAGES } from '../data/services';
 import { generateReceiptPdf, InquiryFormData } from '../utils/generateReceiptPdf';
+import { BlueCodeLogo } from './BlueCodeLogo';
 
 export const InquirySection: React.FC<{ initialService?: string }> = ({ initialService }) => {
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [address, setAddress] = useState('');
   const [service, setService] = useState(
-    initialService || ALL_SERVICES[0].title
+    initialService || 'Investment Package: Growth Plan (Annual — NPR 2,800 / mo · NPR 33,600 / yr)'
   );
   const [notes, setNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -17,6 +18,44 @@ export const InquirySection: React.FC<{ initialService?: string }> = ({ initialS
     fileName: string;
     whatsappUrl: string;
   } | null>(null);
+
+  useEffect(() => {
+    if (initialService) {
+      setService(initialService);
+    }
+  }, [initialService]);
+
+  // Determine if the currently chosen service is an Investment Package
+  const isInvestmentPackage =
+    service.includes('Investment Package') ||
+    service.includes('Plan') ||
+    service.includes('Essentials') ||
+    service.includes('Growth') ||
+    service.includes('Enterprise Custom');
+
+  const currentPlan = service.includes('Growth')
+    ? INVESTMENT_PACKAGES.find((p) => p.id === 'pkg-growth')!
+    : service.includes('Enterprise')
+    ? INVESTMENT_PACKAGES.find((p) => p.id === 'pkg-enterprise')!
+    : INVESTMENT_PACKAGES.find((p) => p.id === 'pkg-essentials')!;
+
+  const isAnnual = service.toLowerCase().includes('annual');
+
+  const handleCycleChange = (cycle: 'monthly' | 'annual') => {
+    if (cycle === 'annual') {
+      if (currentPlan.id === 'pkg-enterprise') {
+        setService('Investment Package: Enterprise Custom (Annual Milestone)');
+      } else {
+        setService(`Investment Package: ${currentPlan.name} (Annual — ${currentPlan.annualPrice} · ${currentPlan.annualBillingNote.split('(')[0].trim()})`);
+      }
+    } else {
+      if (currentPlan.id === 'pkg-enterprise') {
+        setService('Investment Package: Enterprise Custom (Monthly Retainer)');
+      } else {
+        setService(`Investment Package: ${currentPlan.name} (Monthly — ${currentPlan.monthlyPrice})`);
+      }
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,7 +96,7 @@ export const InquirySection: React.FC<{ initialService?: string }> = ({ initialS
       `*Client Name:* ${name}\n` +
       `*Phone/WhatsApp:* ${fullPhone}\n` +
       `*Location/Address:* ${address || 'Kathmandu, Nepal'}\n` +
-      `*Requested Service:* ${service}\n` +
+      `*Selected Service / Package:* ${service}\n` +
       `*Additional Notes:* ${notes || 'Standard project consultation requested'}\n` +
       `───────────────────────────\n` +
       `*Official Letterhead Receipt:* Downloaded instantly on submission\n` +
@@ -106,11 +145,11 @@ export const InquirySection: React.FC<{ initialService?: string }> = ({ initialS
               Submit your project brief below. You will receive an <strong className="text-white">instant auto-downloaded official PDF letterhead receipt</strong> with all details, and your inquiry will be routed straight to our lead agency team on WhatsApp.
             </p>
 
-            {/* Letterhead Feature Highlights */}
+            {/* Letterhead Feature Highlights with Glassmorphism */}
             <div className="space-y-3 pt-2">
-              <div className="p-4 rounded-xl bg-[#0C1222] border border-slate-800 flex items-start gap-3.5">
-                <div className="w-9 h-9 rounded-lg bg-[#6495ED]/15 text-[#6495ED] flex items-center justify-center shrink-0">
-                  <FileDown className="w-4 h-4" />
+              <div className="p-4 rounded-2xl glass-card glass-shiny-hover border border-white/10 flex items-start gap-3.5">
+                <div className="w-10 h-10 rounded-xl bg-[#6495ED]/15 text-[#6495ED] flex items-center justify-center shrink-0">
+                  <FileDown className="w-5 h-5" />
                 </div>
                 <div>
                   <h4 className="text-sm font-bold text-white">Instant Letterhead PDF Receipt</h4>
@@ -120,69 +159,82 @@ export const InquirySection: React.FC<{ initialService?: string }> = ({ initialS
                 </div>
               </div>
 
-              <div className="p-4 rounded-xl bg-[#0C1222] border border-slate-800 flex items-start gap-3.5">
-                <div className="w-9 h-9 rounded-lg bg-[#25D366]/15 text-[#25D366] flex items-center justify-center shrink-0">
-                  <MessageSquare className="w-4 h-4" />
+              <div className="p-4 rounded-2xl glass-card glass-shiny-hover border border-white/10 flex items-start gap-3.5">
+                <div className="w-10 h-10 rounded-xl bg-[#6495ED]/15 text-[#6495ED] flex items-center justify-center shrink-0">
+                  <MessageSquare className="w-5 h-5" />
                 </div>
                 <div>
                   <h4 className="text-sm font-bold text-white">Direct WhatsApp Fast-Track</h4>
                   <p className="text-xs text-slate-400 mt-0.5">
-                    Preformatted inquiry sent immediately to +977 9715971505 for prompt quote &amp; consultation.
+                    Instant message generation to our Kathmandu strategy desk (+977 9715971505) for priority response.
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl glass-card glass-shiny-hover border border-white/10 flex items-start gap-3.5">
+                <div className="w-10 h-10 rounded-xl bg-[#6495ED]/15 text-[#6495ED] flex items-center justify-center shrink-0">
+                  <Layers className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-white">Services &amp; Investment Packages</h4>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    Choose from all 12 individual services or our transparent monthly &amp; annual investment tiers.
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* Direct Studio Contacts */}
-            <div className="pt-2 border-t border-slate-800/80 flex flex-col sm:flex-row gap-4 text-xs text-slate-400">
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-[#6495ED]" />
-                <span>Kathmandu, Nepal</span>
+            {/* Direct contact footnote */}
+            <div className="p-4 rounded-xl bg-slate-900/40 border border-slate-800 text-xs text-slate-400 flex items-center justify-between">
+              <div>
+                <span className="text-slate-200 font-medium">Headquarters:</span> New Baneshwor, Kathmandu, Nepal
               </div>
-              <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-[#6495ED]" />
-                <span>+977 9715971505</span>
+              <div className="font-mono text-[#6495ED] font-bold">
+                +977 9715971505
               </div>
             </div>
           </div>
 
-          {/* Right Column: The Client Inquiry Form */}
+          {/* Right Column: Inquiry Form & Receipt Generator */}
           <div className="lg:col-span-7">
-            <div className="p-6 sm:p-8 lg:p-10 rounded-3xl bg-[#0A0F1D]/90 border border-slate-800 shadow-2xl relative overflow-hidden backdrop-blur-md">
-              <div className="absolute top-0 right-0 w-48 h-48 bg-[#6495ED]/10 rounded-full blur-2xl pointer-events-none" />
-
-              <div className="flex items-center justify-between border-b border-slate-800/80 pb-5 mb-6">
+            <div className="glass-card glass-shiny-hover rounded-3xl p-6 sm:p-8 lg:p-10 border border-white/10 shadow-2xl relative">
+              <div className="flex items-center justify-between pb-6 mb-6 border-b border-white/10">
                 <div>
-                  <h3 className="text-xl sm:text-2xl font-bold text-white">Client Inquiry Form</h3>
-                  <p className="text-xs text-slate-400 mt-1">Complete all fields to generate your verified PDF letterhead receipt</p>
+                  <span className="text-xs font-mono font-bold tracking-wider uppercase text-[#6495ED]">
+                    OFFICIAL INQUIRY FORM
+                  </span>
+                  <h3 className="text-xl sm:text-2xl font-bold text-white mt-0.5">
+                    Client Details &amp; Scope
+                  </h3>
                 </div>
-                <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#6495ED]/15 text-[#6495ED] text-xs font-mono font-semibold">
-                  <span>NEPAL</span>
-                  <span className="text-base leading-none">🇳🇵</span>
+                <div className="hidden sm:block">
+                  <BlueCodeLogo size={36} />
                 </div>
               </div>
 
               {lastSubmitted ? (
-                <div className="space-y-6 py-4 animate-fade-in text-center sm:text-left">
-                  <div className="p-5 rounded-2xl bg-emerald-950/40 border border-emerald-500/30 flex flex-col sm:flex-row items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
-                      <CheckCircle2 className="w-6 h-6" />
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="text-base font-bold text-white">Inquiry Successfully Submitted!</h4>
-                      <p className="text-xs text-slate-300 mt-1">
-                        Your official letterhead receipt <strong className="text-white">{lastSubmitted.fileName}</strong> was downloaded to your device and your request has been forwarded to WhatsApp.
-                      </p>
-                      <div className="mt-2 text-xs font-mono text-[#6495ED]">
-                        Ref: {lastSubmitted.data.referenceId}
-                      </div>
-                    </div>
+                <div className="space-y-6 py-4 animate-fade-in text-center">
+                  <div className="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 mx-auto flex items-center justify-center border border-emerald-500/30">
+                    <CheckCircle2 className="w-8 h-8" />
+                  </div>
+                  <div>
+                    <h4 className="text-2xl font-bold text-white">Inquiry Received &amp; Receipt Generated!</h4>
+                    <p className="text-sm text-slate-300 mt-1 max-w-md mx-auto">
+                      Your letterhead receipt <code className="text-[#6495ED] font-mono">{lastSubmitted.fileName}</code> was downloaded automatically.
+                    </p>
+                  </div>
+
+                  <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 text-left text-xs font-mono text-slate-300 space-y-1.5 max-w-md mx-auto">
+                    <div><span className="text-slate-500">REF:</span> {lastSubmitted.data.referenceId}</div>
+                    <div><span className="text-slate-500">CLIENT:</span> {lastSubmitted.data.name}</div>
+                    <div><span className="text-slate-500">PHONE:</span> {lastSubmitted.data.phone}</div>
+                    <div><span className="text-slate-500">SCOPE:</span> {lastSubmitted.data.service}</div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
                     <button
                       onClick={handleDownloadAgain}
-                      className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition"
+                      className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition cursor-pointer"
                     >
                       <FileDown className="w-4 h-4 text-[#6495ED]" />
                       <span>Re-download PDF Letterhead</span>
@@ -202,7 +254,7 @@ export const InquirySection: React.FC<{ initialService?: string }> = ({ initialS
                   <div className="text-center pt-3">
                     <button
                       onClick={() => setLastSubmitted(null)}
-                      className="text-xs text-slate-400 hover:text-white underline underline-offset-4"
+                      className="text-xs text-slate-400 hover:text-white underline underline-offset-4 cursor-pointer"
                     >
                       Submit another inquiry
                     </button>
@@ -220,7 +272,7 @@ export const InquirySection: React.FC<{ initialService?: string }> = ({ initialS
                       required
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      placeholder="e.g. Ramesh Shrestha"
+                      placeholder="e.g. Bipin Chhetri"
                       className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-[#6495ED] focus:ring-1 focus:ring-[#6495ED] transition"
                     />
                   </div>
@@ -268,11 +320,19 @@ export const InquirySection: React.FC<{ initialService?: string }> = ({ initialS
                     </div>
                   </div>
 
-                  {/* Field 4: Services (Complete services dropdown list) */}
+                  {/* Field 4: Services & Investment Packages (Complete combined dropdown list with Monthly / Annual options) */}
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
-                      Select Service (Complete Services List) *
-                    </label>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+                        Select Service or Investment Package *
+                      </label>
+                      {isInvestmentPackage && (
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#6495ED]/20 text-[#6495ED] font-bold">
+                          PACKAGE SELECTED
+                        </span>
+                      )}
+                    </div>
+                    
                     <div className="relative">
                       <select
                         value={service}
@@ -280,16 +340,103 @@ export const InquirySection: React.FC<{ initialService?: string }> = ({ initialS
                         required
                         className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-sm focus:outline-none focus:border-[#6495ED] focus:ring-1 focus:ring-[#6495ED] transition appearance-none cursor-pointer"
                       >
-                        {ALL_SERVICES.map((srv) => (
-                          <option key={srv.id} value={`${srv.number}. ${srv.title}`} className="bg-slate-900 text-white py-2">
-                            {srv.number}. {srv.title} — {srv.tagline}
+                        <optgroup label="✨ Investment Packages — Monthly Billing" className="bg-slate-900 font-bold text-[#6495ED]">
+                          <option value="Investment Package: Essentials Plan (Monthly — NPR 2,500 / mo)" className="bg-slate-900 text-white py-1">
+                            Essentials Plan — Monthly (NPR 2,500 / mo)
                           </option>
-                        ))}
+                          <option value="Investment Package: Growth Plan (Monthly — NPR 3,500 / mo)" className="bg-slate-900 text-white py-1">
+                            Growth Plan — Monthly (NPR 3,500 / mo)
+                          </option>
+                          <option value="Investment Package: Enterprise Custom (Monthly Retainer)" className="bg-slate-900 text-white py-1">
+                            Enterprise Custom — Monthly Retainer (Tailored Scope)
+                          </option>
+                        </optgroup>
+
+                        <optgroup label="✨ Investment Packages — Annual Billing (Save 20%)" className="bg-slate-900 font-bold text-emerald-400">
+                          <option value="Investment Package: Essentials Plan (Annual — NPR 2,000 / mo · NPR 24,000 / yr)" className="bg-slate-900 text-white py-1">
+                            Essentials Plan — Annual (NPR 2,000 / mo · NPR 24,000 / yr — Save 20%)
+                          </option>
+                          <option value="Investment Package: Growth Plan (Annual — NPR 2,800 / mo · NPR 33,600 / yr)" className="bg-slate-900 text-white py-1">
+                            Growth Plan — Annual (NPR 2,800 / mo · NPR 33,600 / yr — Save 20%)
+                          </option>
+                          <option value="Investment Package: Enterprise Custom (Annual Milestone)" className="bg-slate-900 text-white py-1">
+                            Enterprise Custom — Annual Milestone (Tailored Scope)
+                          </option>
+                        </optgroup>
+
+                        <optgroup label="🛠️ Complete Individual Services (All 12 Capabilities)" className="bg-slate-900 font-bold text-[#6495ED]">
+                          {ALL_SERVICES.map((srv) => (
+                            <option key={srv.id} value={`${srv.number}. ${srv.title}`} className="bg-slate-900 text-white py-1">
+                              {srv.number}. {srv.title} — {srv.tagline}
+                            </option>
+                          ))}
+                        </optgroup>
                       </select>
                       <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 text-xs">
                         ▼
                       </div>
                     </div>
+
+                    {/* Interactive Monthly / Annual Billing Toggle with Exact Prices for Selected Package */}
+                    {isInvestmentPackage && currentPlan && (
+                      <div className="mt-3 p-3.5 rounded-2xl bg-slate-900/90 border border-[#6495ED]/30 space-y-2.5 animate-fade-in">
+                        <div className="flex items-center justify-between text-xs">
+                          <div className="flex items-center gap-1.5 font-bold text-slate-200">
+                            <Sparkles className="w-3.5 h-3.5 text-[#6495ED]" />
+                            <span>Plan: {currentPlan.badge}</span>
+                          </div>
+                          <span className="text-[11px] font-mono text-[#6495ED] font-semibold">
+                            {isAnnual ? '⚡ Annual Term Active (Save 20%)' : '📅 Monthly Term Active'}
+                          </span>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                          <button
+                            type="button"
+                            onClick={() => handleCycleChange('monthly')}
+                            className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
+                              !isAnnual
+                                ? 'bg-[#6495ED]/20 border-[#6495ED] text-white shadow-md shadow-[#6495ED]/20 ring-1 ring-[#6495ED]'
+                                : 'bg-slate-900/80 border-slate-700/80 text-slate-400 hover:text-white hover:border-slate-600'
+                            }`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="font-bold text-xs text-white">Monthly Billing</span>
+                              {!isAnnual && <CheckCircle2 className="w-4 h-4 text-[#6495ED]" />}
+                            </div>
+                            <div className="text-sm font-extrabold text-white mt-1.5">
+                              {currentPlan.monthlyPrice}
+                            </div>
+                            <span className="text-[10px] text-slate-400 mt-0.5">
+                              {currentPlan.monthlyBillingNote}
+                            </span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => handleCycleChange('annual')}
+                            className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
+                              isAnnual
+                                ? 'bg-emerald-500/15 border-emerald-400 text-white shadow-md shadow-emerald-500/20 ring-1 ring-emerald-400'
+                                : 'bg-slate-900/80 border-slate-700/80 text-slate-400 hover:text-white hover:border-slate-600'
+                            }`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="font-bold text-xs text-white">Annual Billing</span>
+                              <span className="text-[9px] font-extrabold px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">
+                                SAVE 20%
+                              </span>
+                            </div>
+                            <div className="text-sm font-extrabold text-emerald-400 mt-1.5">
+                              {currentPlan.annualPrice}
+                            </div>
+                            <span className="text-[10px] text-slate-300 mt-0.5">
+                              {currentPlan.annualBillingNote}
+                            </span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Field 5: Additional Notes */}
@@ -306,15 +453,15 @@ export const InquirySection: React.FC<{ initialService?: string }> = ({ initialS
                     />
                   </div>
 
-                  {/* Submit Button: Sends to WhatsApp & Auto-downloads PDF Receipt */}
+                  {/* Submit Button: strictly 'Inquiry Now' with whitespace-nowrap as instructed */}
                   <div className="pt-2">
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full flex items-center justify-center gap-2.5 py-4 px-6 rounded-xl bg-[#6495ED] hover:bg-[#5383db] text-white font-bold text-sm transition-all duration-200 shadow-lg shadow-[#6495ED]/25 active:scale-[0.99] cursor-pointer"
+                      className="w-full flex items-center justify-center gap-2.5 py-4 px-6 rounded-xl bg-[#6495ED] hover:bg-[#5383db] text-white font-bold text-sm transition-all duration-200 shadow-lg shadow-[#6495ED]/25 active:scale-[0.99] cursor-pointer whitespace-nowrap"
                     >
                       <Send className="w-4 h-4" />
-                      <span>Send Inquiry &amp; Download Official Letterhead Receipt</span>
+                      <span className="whitespace-nowrap">Inquiry Now</span>
                       <ArrowRight className="w-4 h-4 ml-1" />
                     </button>
                     <p className="text-center text-[11px] text-slate-400 mt-2.5">

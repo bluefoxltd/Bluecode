@@ -64,7 +64,7 @@ export const SecuritySection: React.FC = () => {
               return (
                 <div
                   key={item.title}
-                  className="p-8 rounded-2xl border border-slate-800 bg-[#0C1222] hover:bg-[#10182E] hover:border-[#6495ED]/40 hover:shadow-lg hover:shadow-[#6495ED]/5 transition-all duration-300 group"
+                  className="p-8 rounded-2xl glass-card glass-shiny-hover border border-white/10 hover:border-[#6495ED]/50 transition-all duration-300 group"
                 >
                   <div className="w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-[#6495ED] group-hover:bg-[#6495ED] group-hover:text-white group-hover:border-[#6495ED] transition-colors duration-300 mb-6">
                     <Icon className="w-6 h-6" />
